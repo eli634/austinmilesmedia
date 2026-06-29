@@ -1,50 +1,19 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
+import { hasSupabaseEnv } from "@/lib/supabase/env";
 
-const hasSupabaseEnv =
-  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-  Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+import { signInAdmin } from "./actions";
 
-export default function AdminLoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError("");
-    setIsSubmitting(true);
-
-    if (!hasSupabaseEnv) {
-      setError("Supabase env vars are missing.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (signInError) {
-      setError(signInError.message);
-      setIsSubmitting(false);
-      return;
-    }
-
-    router.push("/admin");
-    router.refresh();
-  }
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+  const error = params?.error;
+  const isConfigured = hasSupabaseEnv();
 
   return (
     <main className="relative z-10 flex min-h-screen items-center justify-center px-5 py-16">
@@ -64,10 +33,11 @@ export default function AdminLoginPage() {
           />
         </Link>
 
-        <form onSubmit={handleSubmit} className="rounded-3xl border border-[#dbe6f1] bg-white p-7 shadow-sm">
-          <p className="eyebrow mb-5">Admin</p>
-          <h1 className="h2">Austin login</h1>
-          <p className="max-w-[62ch] font-body font-medium leading-relaxed text-[#52677f] mt-4 text-sm">
+        <form action={signInAdmin} className="rounded-3xl border border-[#dbe6f1] bg-white p-7 shadow-sm">
+          <p className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-[#7b8da3]">
+            Admin
+          </p>
+          <p className="max-w-[62ch] font-body font-medium leading-relaxed text-[#52677f] text-sm">
             Sign in to view inquiries, manage deals, and track bookings.
           </p>
 
@@ -76,8 +46,7 @@ export default function AdminLoginPage() {
               Email
               <input
                 type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                name="email"
                 required
                 className="rounded-xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 text-[#0b4a7a] outline-none transition-colors placeholder:text-[#7b8da3] focus:border-[#0b4a7a]"
                 placeholder="austin@example.com"
@@ -87,8 +56,7 @@ export default function AdminLoginPage() {
               Password
               <input
                 type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                name="password"
                 required
                 className="rounded-xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 text-[#0b4a7a] outline-none transition-colors placeholder:text-[#7b8da3] focus:border-[#0b4a7a]"
                 placeholder="Password"
@@ -96,18 +64,22 @@ export default function AdminLoginPage() {
             </label>
           </div>
 
-          {error && <p className="mt-5 font-body text-sm text-[#0b4a7a]">{error}</p>}
+          {error && (
+            <p className="mt-5 rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm font-semibold text-[#0b4a7a]">
+              {error}
+            </p>
+          )}
 
           <Button
             type="submit"
             size="lg"
-            className="mt-8 w-full border-[#0b4a7a] bg-[#0b4a7a] text-white hover:bg-[#0b4a7a] hover:text-white"
-            disabled={isSubmitting || !hasSupabaseEnv}
+            className="mt-8 w-full border-[#0b4a7a] bg-[#0b4a7a] text-white hover:bg-[#08395e] hover:text-white disabled:border-[#b7c8d8] disabled:bg-[#b7c8d8]"
+            disabled={!isConfigured}
           >
-            {isSubmitting ? "Signing in..." : "Sign in"}
+            Sign in
           </Button>
 
-          {!hasSupabaseEnv && (
+          {!isConfigured && (
             <div className="mt-5 grid gap-3">
               <p className="font-body text-xs leading-relaxed text-[#7b8da3]">
                 Supabase is not configured yet, so login is disabled.
