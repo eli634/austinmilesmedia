@@ -3,6 +3,7 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { fragmentMono, interTight } from "./fonts";
 import { Grain } from "./grain";
+import { PrivacyNotice } from "./privacy-notice";
 import { SmoothScroll } from "./smooth-scroll";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -60,6 +61,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <div className="spotlight" aria-hidden />
         <SmoothScroll>{children}</SmoothScroll>
+        <PrivacyNotice />
         <Grain />
       </body>
     </html>

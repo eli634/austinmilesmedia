@@ -345,12 +345,14 @@ export default function GetStarted() {
                       <input
                         className={fieldClass}
                         placeholder="Your name *"
+                        maxLength={120}
                         value={form.name}
                         onChange={(e) => updateForm("name", e.target.value)}
                       />
                       <input
                         className={fieldClass}
                         placeholder="Business name"
+                        maxLength={160}
                         value={form.business}
                         onChange={(e) => updateForm("business", e.target.value)}
                       />
@@ -358,6 +360,7 @@ export default function GetStarted() {
                     <input
                       className={fieldClass}
                       placeholder="Instagram handle or website *"
+                      maxLength={180}
                       value={form.handle}
                       onChange={(e) => updateForm("handle", e.target.value)}
                     />
@@ -366,6 +369,7 @@ export default function GetStarted() {
                         type="email"
                         className={fieldClass}
                         placeholder="Email *"
+                        maxLength={180}
                         value={form.email}
                         onChange={(e) => updateForm("email", e.target.value)}
                       />
@@ -373,6 +377,7 @@ export default function GetStarted() {
                         type="tel"
                         className={fieldClass}
                         placeholder="Phone (optional)"
+                        maxLength={60}
                         value={form.phone}
                         onChange={(e) => updateForm("phone", e.target.value)}
                       />
@@ -380,6 +385,7 @@ export default function GetStarted() {
                     <textarea
                       className={cn(fieldClass, "min-h-28 resize-none")}
                       placeholder="Anything we should know? (optional)"
+                      maxLength={2000}
                       value={form.message}
                       onChange={(e) => updateForm("message", e.target.value)}
                     />
