@@ -1,16 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { isAdminDemoMode } from "@/lib/supabase/env";
+import {
+  getSupabaseAnonKey,
+  getSupabaseUrl,
+  isAdminDemoMode,
+} from "@/lib/supabase/env";
 import type { Database } from "@/lib/supabase/types";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = getSupabaseUrl();
+  const anonKey = getSupabaseAnonKey();
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
-  const isLoginRoute = request.nextUrl.pathname === "/admin/login";
+  const isLoginRoute =
+    request.nextUrl.pathname === "/admin/login" ||
+    request.nextUrl.pathname === "/admin/login/submit";
 
   if (isAdminRoute && isAdminDemoMode()) {
     if (isLoginRoute) {
@@ -25,6 +31,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
 
+    return response;
+  }
+
+  if (isLoginRoute) {
     return response;
   }
 
@@ -68,11 +78,12 @@ export async function middleware(request: NextRequest) {
   if (!profile) {
     await supabase.auth.signOut();
 
-    return NextResponse.redirect(new URL("/admin/login", request.url));
-  }
-
-  if (isLoginRoute) {
-    return NextResponse.redirect(new URL("/admin", request.url));
+    return NextResponse.redirect(
+      new URL(
+        "/admin/login?error=This%20user%20is%20not%20authorized%20for%20Austin%20admin.",
+        request.url,
+      ),
+    );
   }
 
   return response;

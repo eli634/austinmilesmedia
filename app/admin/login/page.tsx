@@ -4,8 +4,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
-import { signInAdmin } from "./actions";
-
 export default async function AdminLoginPage({
   searchParams,
 }: {
@@ -33,7 +31,11 @@ export default async function AdminLoginPage({
           />
         </Link>
 
-        <form action={signInAdmin} className="rounded-3xl border border-[#dbe6f1] bg-white p-7 shadow-sm">
+        <form
+          action="/admin/login/submit"
+          method="post"
+          className="rounded-3xl border border-[#dbe6f1] bg-white p-7 shadow-sm"
+        >
           <p className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-[#7b8da3]">
             Admin
           </p>
