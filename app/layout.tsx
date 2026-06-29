@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image-amm.png",
         width: 1200,
         height: 630,
-        alt: "Austin Miles Media wordmark on ink.",
+        alt: "Austin Miles Media preview card.",
       },
     ],
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Austin Miles Media",
     description:
       "In-house video for roofing, HVAC, and custom builders who want more booked jobs from content they never have to film.",
-    images: ["/og-image.png"],
+    images: ["/og-image-amm.png"],
   },
   icons: {
     icon: "/favicon.ico",
