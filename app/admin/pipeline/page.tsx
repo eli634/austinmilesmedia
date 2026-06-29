@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Database, DealStatus } from "@/lib/supabase/types";
 
 import { AdminShell } from "../admin-shell";
-import { updateDealDetails } from "../actions";
+import { deleteDeal, updateDealDetails } from "../actions";
 import { dealStatuses } from "../constants";
 import { demoContacts, demoDeals } from "../demo-data";
 import { KanbanBoard } from "./kanban-board";
@@ -416,9 +416,18 @@ function DealQuickEditModal({
           >
             Open full page
           </Link>
-          <button className="rounded-full bg-[#0b4a7a] px-6 py-3 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)] transition-colors hover:bg-[#08395e]">
-            Save changes
-          </button>
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            <button
+              type="submit"
+              formAction={deleteDeal}
+              className="rounded-full border border-[#dbe6f1] px-5 py-3 font-body text-sm font-bold text-[#9a2f2f] transition-colors hover:border-[#9a2f2f]/30 hover:bg-[#fff5f5]"
+            >
+              Delete deal
+            </button>
+            <button className="rounded-full bg-[#0b4a7a] px-6 py-3 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)] transition-colors hover:bg-[#08395e]">
+              Save changes
+            </button>
+          </div>
         </div>
       </form>
     </div>

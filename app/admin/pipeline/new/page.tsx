@@ -1,18 +1,31 @@
 import Link from "next/link";
 
+import { isAdminDemoMode } from "@/lib/supabase/env";
+import { createClient } from "@/lib/supabase/server";
 import type { DealStatus } from "@/lib/supabase/types";
 
 import { createDealWithContact } from "../../actions";
 import { AdminShell } from "../../admin-shell";
 import { dealStatuses } from "../../constants";
+import { demoContacts } from "../../demo-data";
 
 export default async function NewDealPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ status?: DealStatus }>;
+  searchParams?: Promise<{ status?: DealStatus; contactId?: string }>;
 }) {
   const params = await searchParams;
   const defaultStatus = params?.status ?? "new_inquiry";
+  const demoMode = isAdminDemoMode();
+  const contact = params?.contactId
+    ? demoMode
+      ? demoContacts.find((item) => item.id === params.contactId) ?? null
+      : ((await (await createClient())
+          .from("contacts")
+          .select("*")
+          .eq("id", params.contactId)
+          .maybeSingle()).data ?? null)
+    : null;
 
   return (
     <AdminShell>
@@ -33,6 +46,7 @@ export default async function NewDealPage({
       </div>
 
       <form action={createDealWithContact} className="grid gap-6 xl:grid-cols-[1fr_0.85fr]">
+        <input type="hidden" name="contactId" value={contact?.id ?? ""} />
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6">
             <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
@@ -50,6 +64,13 @@ export default async function NewDealPage({
                 name="title"
                 required
                 placeholder="Summit Roofing managed content"
+                defaultValue={
+                  contact?.business
+                    ? `${contact.business} content deal`
+                    : contact?.name
+                      ? `${contact.name} content deal`
+                      : ""
+                }
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -121,6 +142,7 @@ export default async function NewDealPage({
                 name="contactName"
                 required
                 placeholder="Jake Miller"
+                defaultValue={contact?.name ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -129,6 +151,7 @@ export default async function NewDealPage({
               <input
                 name="business"
                 placeholder="Summit Roofing Co."
+                defaultValue={contact?.business ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -139,6 +162,7 @@ export default async function NewDealPage({
                 type="email"
                 required
                 placeholder="jake@summitroofing.co"
+                defaultValue={contact?.email ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -147,6 +171,7 @@ export default async function NewDealPage({
               <input
                 name="phone"
                 placeholder="(512) 555-0128"
+                defaultValue={contact?.phone ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -155,6 +180,7 @@ export default async function NewDealPage({
               <input
                 name="handle"
                 placeholder="@summitroofing"
+                defaultValue={contact?.handle ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -165,6 +191,7 @@ export default async function NewDealPage({
               <input
                 name="businessType"
                 placeholder="Local service business"
+                defaultValue={contact?.business_type ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>
@@ -176,6 +203,7 @@ export default async function NewDealPage({
                 name="contactNotes"
                 rows={4}
                 placeholder="Fit, preferences, context, or anything Austin should know."
+                defaultValue={contact?.notes ?? ""}
                 className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none placeholder:text-[#9aabc0] focus:border-[#0b4a7a]"
               />
             </label>

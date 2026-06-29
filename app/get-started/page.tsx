@@ -17,10 +17,10 @@ const businessTypes: Option[] = [
     tag: "Jobs • bookings • calls",
   },
   {
-    value: "Retail & e-commerce",
-    label: "Retail & e-commerce",
-    desc: "Stores and online brands that sell products.",
-    tag: "Sales • product launches",
+    value: "Athletes & sports",
+    label: "Athletes & sports",
+    desc: "Athletes, teams, trainers, and sports brands building a stronger presence.",
+    tag: "Highlights • offers • reach",
   },
   {
     value: "Restaurant & hospitality",

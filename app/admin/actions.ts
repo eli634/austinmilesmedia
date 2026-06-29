@@ -178,7 +178,125 @@ export async function updateDealDetails(formData: FormData) {
   revalidatePath(`/admin/pipeline/${id}`);
 }
 
+export async function createContact(formData: FormData) {
+  const name = String(formData.get("contactName") ?? "").trim();
+  const business = String(formData.get("business") ?? "").trim() || null;
+  const email = String(formData.get("email") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim() || null;
+  const handle = String(formData.get("handle") ?? "").trim() || null;
+  const businessType = String(formData.get("businessType") ?? "").trim() || null;
+  const notes = String(formData.get("contactNotes") ?? "").trim() || null;
+
+  if (!name || !email) {
+    return;
+  }
+
+  if (isAdminDemoMode()) {
+    revalidatePath("/admin/inquiries");
+    return;
+  }
+
+  const supabase = await createClient();
+  await supabase.from("contacts").insert({
+    name,
+    business,
+    email,
+    phone,
+    handle,
+    business_type: businessType,
+    notes,
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/pipeline");
+}
+
+export async function updateContactDetails(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const name = String(formData.get("contactName") ?? "").trim();
+  const business = String(formData.get("business") ?? "").trim() || null;
+  const email = String(formData.get("email") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim() || null;
+  const handle = String(formData.get("handle") ?? "").trim() || null;
+  const businessType = String(formData.get("businessType") ?? "").trim() || null;
+  const notes = String(formData.get("contactNotes") ?? "").trim() || null;
+
+  if (!id || !name || !email) {
+    return;
+  }
+
+  if (isAdminDemoMode()) {
+    revalidatePath("/admin/inquiries");
+    return;
+  }
+
+  const supabase = await createClient();
+  await supabase
+    .from("contacts")
+    .update({
+      name,
+      business,
+      email,
+      phone,
+      handle,
+      business_type: businessType,
+      notes,
+    })
+    .eq("id", id);
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/pipeline");
+}
+
+export async function deleteContact(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+
+  if (!id) {
+    return;
+  }
+
+  if (isAdminDemoMode()) {
+    revalidatePath("/admin/inquiries");
+    redirect("/admin/inquiries");
+  }
+
+  const supabase = await createClient();
+  await supabase.from("contacts").delete().eq("id", id);
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/pipeline");
+  revalidatePath("/admin/calendar");
+  redirect("/admin/inquiries");
+}
+
+export async function deleteDeal(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+
+  if (!id) {
+    return;
+  }
+
+  if (isAdminDemoMode()) {
+    revalidatePath("/admin");
+    revalidatePath("/admin/pipeline");
+    redirect("/admin/pipeline");
+  }
+
+  const supabase = await createClient();
+  await supabase.from("deals").delete().eq("id", id);
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/pipeline");
+  revalidatePath("/admin/calendar");
+  redirect("/admin/pipeline");
+}
+
 export async function createDealWithContact(formData: FormData) {
+  const existingContactId = String(formData.get("contactId") ?? "") || null;
   const title = String(formData.get("title") ?? "").trim();
   const status = (String(formData.get("status") ?? "") || "new_inquiry") as DealStatus;
   const valueRaw = String(formData.get("value") ?? "").trim();
@@ -205,14 +323,18 @@ export async function createDealWithContact(formData: FormData) {
 
   const supabase = await createClient();
   const value = valueRaw ? Number(valueRaw) : null;
-  const { data: existingContact } = await supabase
-    .from("contacts")
-    .select("id")
-    .eq("email", email)
-    .limit(1)
-    .maybeSingle();
+  let contactId = existingContactId;
 
-  let contactId = existingContact?.id ?? null;
+  if (!contactId) {
+    const { data: existingContact } = await supabase
+      .from("contacts")
+      .select("id")
+      .eq("email", email)
+      .limit(1)
+      .maybeSingle();
+
+    contactId = existingContact?.id ?? null;
+  }
 
   if (contactId) {
     await supabase
