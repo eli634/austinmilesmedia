@@ -51,6 +51,25 @@ export function Hero() {
             Scroll to enter
           </motion.a>
         </div>
+        <Link
+          href="/admin/login"
+          aria-label="Austin admin login"
+          className="absolute bottom-8 right-5 z-10 flex size-9 items-center justify-center rounded-full border border-white/12 bg-ink/25 text-white/45 backdrop-blur-md transition-colors hover:border-white/28 hover:text-white sm:right-8"
+        >
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            className="size-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 3l7 3v5c0 4.6-2.8 8-7 10-4.2-2-7-5.4-7-10V6l7-3Z" />
+            <path d="M9.5 12.5l1.7 1.7 3.5-4.2" />
+          </svg>
+        </Link>
       </section>
 
       <section
