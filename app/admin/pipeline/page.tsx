@@ -76,15 +76,25 @@ export default async function AdminPipelinePage({
   const view = params?.view === "list" ? "list" : "board";
   const demoMode = isAdminDemoMode();
   const supabase = demoMode ? null : await createClient();
-  const deals = demoMode
-    ? demoDeals
-    : ((await supabase!
+
+  let deals: Deal[];
+  let contacts: Contact[];
+
+  if (demoMode) {
+    deals = demoDeals;
+    contacts = demoContacts;
+  } else {
+    const [dealsResult, contactsResult] = await Promise.all([
+      supabase!
         .from("deals")
         .select("*")
-        .order("updated_at", { ascending: false })).data ?? []);
-  const contacts = demoMode
-    ? demoContacts
-    : ((await supabase!.from("contacts").select("*")).data ?? []);
+        .order("updated_at", { ascending: false }),
+      supabase!.from("contacts").select("*"),
+    ]);
+
+    deals = dealsResult.data ?? [];
+    contacts = contactsResult.data ?? [];
+  }
 
   const contactsById = new Map(
     contacts.map((contact) => [contact.id, contact]),

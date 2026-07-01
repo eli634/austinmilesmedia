@@ -1,18 +1,10 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import {
-  getSupabaseAnonKey,
-  getSupabaseUrl,
-  isAdminDemoMode,
-} from "@/lib/supabase/env";
-import type { Database } from "@/lib/supabase/types";
+import { hasSupabaseAuthCookie } from "@/lib/supabase/auth-cookie";
+import { getSupabaseAnonKey, getSupabaseUrl, isAdminDemoMode } from "@/lib/supabase/env";
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request });
-
-  const url = getSupabaseUrl();
-  const anonKey = getSupabaseAnonKey();
+  const response = NextResponse.next({ request });
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
   const isLoginRoute =
     request.nextUrl.pathname === "/admin/login" ||
@@ -26,7 +18,7 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  if (!url || !anonKey) {
+  if (!getSupabaseUrl() || !getSupabaseAnonKey()) {
     if (isAdminRoute && !isLoginRoute) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
@@ -34,56 +26,12 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  if (isLoginRoute) {
+  if (!isAdminRoute || isLoginRoute) {
     return response;
   }
 
-  const supabase = createServerClient<Database>(url, anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          request.cookies.set(name, value);
-          response = NextResponse.next({ request });
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!isAdminRoute) {
-    return response;
-  }
-
-  if (!user) {
-    if (isLoginRoute) {
-      return response;
-    }
-
+  if (!hasSupabaseAuthCookie(request)) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
-  }
-
-  const { data: profile } = await supabase
-    .from("admin_profiles")
-    .select("id")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (!profile) {
-    await supabase.auth.signOut();
-
-    return NextResponse.redirect(
-      new URL(
-        "/admin/login?error=This%20user%20is%20not%20authorized%20for%20Austin%20admin.",
-        request.url,
-      ),
-    );
   }
 
   return response;

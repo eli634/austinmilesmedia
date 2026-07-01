@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { hasSupabaseEnv } from "@/lib/supabase/env";
+import { hasSupabaseEnv, getSupabaseEnvDiagnostics } from "@/lib/supabase/env";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminLoginPage({
   searchParams,
@@ -12,6 +14,7 @@ export default async function AdminLoginPage({
   const params = await searchParams;
   const error = params?.error;
   const isConfigured = hasSupabaseEnv();
+  const envDiagnostics = getSupabaseEnvDiagnostics();
 
   return (
     <main className="relative z-10 flex min-h-screen items-center justify-center px-5 py-16">
@@ -84,8 +87,15 @@ export default async function AdminLoginPage({
           {!isConfigured && (
             <div className="mt-5 grid gap-3">
               <p className="font-body text-xs leading-relaxed text-[#7b8da3]">
-                Supabase is not configured yet, so login is disabled.
+                Supabase is not configured on this deployment, so login is
+                disabled.
               </p>
+              {envDiagnostics.missing.length > 0 && (
+                <p className="font-mono text-[0.62rem] leading-relaxed text-[#7b8da3]">
+                  Missing on server ({envDiagnostics.runtime}):{" "}
+                  {envDiagnostics.missing.join(", ")}
+                </p>
+              )}
               <Button
                 asChild
                 variant="outline"

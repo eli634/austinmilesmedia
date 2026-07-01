@@ -160,7 +160,7 @@ export default function Home() {
               The operation
             </p>
             <h2 className="h2 max-w-[18ch]">
-              We handle the whole thing.
+              We run your content engine.
             </h2>
           </div>
           <p className="body text-lg lg:pb-2">
@@ -183,7 +183,7 @@ export default function Home() {
                 How we work together
               </p>
               <h2 className="h2 max-w-[16ch] text-[#08294a]">
-                Three ways to run it. Pick yours.
+                Three ways to run your content.
               </h2>
             </div>
           </div>
@@ -289,7 +289,7 @@ export default function Home() {
         <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-creme/10 bg-surface">
           <Image
             src="/austin-founder.png"
-            alt="Austin Miles holding a camera on location."
+            alt="Austin Miles in the field with a cinema camera rig."
             fill
             sizes="(min-width: 1024px) 420px, 100vw"
             className="object-cover"

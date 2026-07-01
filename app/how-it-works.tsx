@@ -211,7 +211,7 @@ export function HowItWorks() {
           The model
         </p>
         <h2 className="mx-auto max-w-[18ch] font-[family-name:var(--font-goliath-sans)] text-[clamp(2.25rem,5vw,4.5rem)] font-extrabold leading-[0.95] tracking-[-0.055em] text-[#08294a]">
-          How the whole thing actually works.
+          How it actually works.
         </h2>
       </div>
 

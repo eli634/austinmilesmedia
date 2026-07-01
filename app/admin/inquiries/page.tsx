@@ -31,18 +31,28 @@ export default async function AdminContactsPage({
   const params = await searchParams;
   const demoMode = isAdminDemoMode();
   const supabase = demoMode ? null : await createClient();
-  const contacts = demoMode
-    ? demoContacts
-    : ((await supabase!
+
+  let contacts: Contact[];
+  let deals: Deal[];
+
+  if (demoMode) {
+    contacts = demoContacts;
+    deals = demoDeals;
+  } else {
+    const [contactsResult, dealsResult] = await Promise.all([
+      supabase!
         .from("contacts")
         .select("*")
-        .order("updated_at", { ascending: false })).data ?? []);
-  const deals = demoMode
-    ? demoDeals
-    : ((await supabase!
+        .order("updated_at", { ascending: false }),
+      supabase!
         .from("deals")
         .select("*")
-        .order("updated_at", { ascending: false })).data ?? []);
+        .order("updated_at", { ascending: false }),
+    ]);
+
+    contacts = contactsResult.data ?? [];
+    deals = dealsResult.data ?? [];
+  }
   const selectedContact =
     params?.contact && params.contact !== "new"
       ? contacts.find((contact) => contact.id === params.contact) ?? null

@@ -7,7 +7,7 @@ import type { Database } from "./types";
 export async function createClient() {
   const cookieStore = await cookies();
 
-  return createServerClient<Database>(
+  const supabase = createServerClient<Database>(
     getSupabaseUrl()!,
     getSupabaseAnonKey()!,
     {
@@ -21,10 +21,14 @@ export async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Server components cannot always write cookies; middleware refreshes sessions.
+            // Server components cannot always write cookies; route handlers refresh sessions.
           }
         },
       },
     },
   );
+
+  await supabase.auth.getSession();
+
+  return supabase;
 }

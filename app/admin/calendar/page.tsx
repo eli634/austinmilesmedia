@@ -23,26 +23,39 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export default async function AdminCalendarPage() {
   const demoMode = isAdminDemoMode();
   const supabase = demoMode ? null : await createClient();
-  const bookings = demoMode
-    ? demoBookings
-    : ((await supabase!
+
+  let bookings: (typeof demoBookings)[number][];
+  let deals: (typeof demoDeals)[number][];
+  let contacts: (typeof demoContacts)[number][];
+
+  if (demoMode) {
+    bookings = demoBookings;
+    deals = demoDeals.filter(
+      (deal) => deal.status !== "won" && deal.status !== "lost",
+    );
+    contacts = demoContacts;
+  } else {
+    const [bookingsResult, dealsResult, contactsResult] = await Promise.all([
+      supabase!
         .from("bookings")
         .select("*")
         .order("starts_at", { ascending: true })
-        .limit(100)).data ?? []);
-  const deals = demoMode
-    ? demoDeals.filter((deal) => deal.status !== "won" && deal.status !== "lost")
-    : ((await supabase!
+        .limit(100),
+      supabase!
         .from("deals")
         .select("*")
         .not("status", "in", "(won,lost)")
-        .order("updated_at", { ascending: false })).data ?? []);
-  const contacts = demoMode
-    ? demoContacts
-    : ((await supabase!
+        .order("updated_at", { ascending: false }),
+      supabase!
         .from("contacts")
         .select("*")
-        .order("created_at", { ascending: false })).data ?? []);
+        .order("created_at", { ascending: false }),
+    ]);
+
+    bookings = bookingsResult.data ?? [];
+    deals = dealsResult.data ?? [];
+    contacts = contactsResult.data ?? [];
+  }
 
   const contactsById = new Map(
     contacts.map((contact) => [contact.id, contact]),

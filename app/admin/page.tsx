@@ -2,10 +2,15 @@ import Link from "next/link";
 
 import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/types";
 
 import { AdminShell } from "./admin-shell";
 import { dealStatuses } from "./constants";
 import { demoBookings, demoDeals, demoInquiries } from "./demo-data";
+
+type Inquiry = Database["public"]["Tables"]["inquiries"]["Row"];
+type Deal = Database["public"]["Tables"]["deals"]["Row"];
+type Booking = Database["public"]["Tables"]["bookings"]["Row"];
 
 function formatDate(value: string | null) {
   if (!value) {
@@ -32,31 +37,43 @@ export default async function AdminPage() {
   const demoMode = isAdminDemoMode();
   const supabase = demoMode ? null : await createClient();
 
-  const recentInquiries = demoMode
-    ? demoInquiries.slice(0, 5)
-    : ((await supabase!
+  let recentInquiries: Inquiry[];
+  let openDeals: Deal[];
+  let upcomingBookings: Booking[];
+
+  if (demoMode) {
+    recentInquiries = demoInquiries.slice(0, 5);
+    openDeals = demoDeals.filter(
+      (deal) => deal.status !== "won" && deal.status !== "lost",
+    );
+    upcomingBookings = demoBookings.filter(
+      (booking) => booking.status === "scheduled",
+    );
+  } else {
+    const [inquiriesResult, dealsResult, bookingsResult] = await Promise.all([
+      supabase!
         .from("inquiries")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(5)).data ?? []);
-
-  const openDeals = demoMode
-    ? demoDeals.filter((deal) => deal.status !== "won" && deal.status !== "lost")
-    : ((await supabase!
+        .limit(5),
+      supabase!
         .from("deals")
         .select("*")
         .not("status", "in", "(won,lost)")
         .order("updated_at", { ascending: false })
-        .limit(6)).data ?? []);
-
-  const upcomingBookings = demoMode
-    ? demoBookings.filter((booking) => booking.status === "scheduled")
-    : ((await supabase!
+        .limit(6),
+      supabase!
         .from("bookings")
         .select("*")
         .gte("starts_at", new Date().toISOString())
         .order("starts_at", { ascending: true })
-        .limit(5)).data ?? []);
+        .limit(5),
+    ]);
+
+    recentInquiries = inquiriesResult.data ?? [];
+    openDeals = dealsResult.data ?? [];
+    upcomingBookings = bookingsResult.data ?? [];
+  }
 
   const metrics = [
     {
