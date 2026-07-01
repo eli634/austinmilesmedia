@@ -5,8 +5,8 @@ import { useMemo, useState, useTransition, type DragEvent } from "react";
 
 import type { Database, DealStatus } from "@/lib/supabase/types";
 
-import { updateDealStatus } from "../actions";
-import { dealStatuses } from "../constants";
+import { updateDealStatus } from "../../actions";
+import { dealStatuses } from "../../constants";
 
 type Contact = Database["public"]["Tables"]["contacts"]["Row"];
 type Deal = Database["public"]["Tables"]["deals"]["Row"];

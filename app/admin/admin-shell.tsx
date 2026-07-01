@@ -116,6 +116,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <Link
               key={`${link.label}-${link.href}`}
               href={link.href}
+              prefetch
               className="group flex items-center gap-3 rounded-2xl px-3 py-3 font-body text-sm font-semibold text-creme/62 transition-colors hover:bg-white/10 hover:text-creme"
             >
               <span className="flex size-8 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-creme/42 transition-colors group-hover:border-white/20 group-hover:bg-white/[0.08] group-hover:text-creme">
@@ -166,6 +167,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <Link
                 key={`${link.label}-mobile`}
                 href={link.href}
+                prefetch
                 className="rounded-full border border-[#dbe6f1] px-3 py-1.5 font-body text-xs font-semibold text-[#52677f]"
               >
                 {link.label}

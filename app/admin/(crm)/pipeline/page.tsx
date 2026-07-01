@@ -4,10 +4,9 @@ import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { Database, DealStatus } from "@/lib/supabase/types";
 
-import { AdminShell } from "../admin-shell";
-import { deleteDeal, updateDealDetails } from "../actions";
-import { dealStatuses } from "../constants";
-import { demoContacts, demoDeals } from "../demo-data";
+import { deleteDeal, updateDealDetails } from "../../actions";
+import { dealStatuses } from "../../constants";
+import { demoContacts, demoDeals } from "../../demo-data";
 import { KanbanBoard } from "./kanban-board";
 
 type Contact = Database["public"]["Tables"]["contacts"]["Row"];
@@ -108,7 +107,7 @@ export default async function AdminPipelinePage({
   const closeHref = view === "list" ? "/admin/pipeline?view=list" : "/admin/pipeline";
 
   return (
-    <AdminShell>
+    <>
       <div
         className={
           selectedDeal
@@ -191,7 +190,7 @@ export default async function AdminPipelinePage({
           closeHref={closeHref}
         />
       )}
-    </AdminShell>
+    </>
   );
 }
 

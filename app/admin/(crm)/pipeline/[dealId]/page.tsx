@@ -4,10 +4,9 @@ import { notFound } from "next/navigation";
 import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
-import { deleteDeal, updateDealDetails } from "../../actions";
-import { AdminShell } from "../../admin-shell";
-import { dealStatuses } from "../../constants";
-import { demoContacts, demoDeals } from "../../demo-data";
+import { deleteDeal, updateDealDetails } from "../../../actions";
+import { dealStatuses } from "../../../constants";
+import { demoContacts, demoDeals } from "../../../demo-data";
 
 function formatMoney(value: number | null) {
   if (!value) {
@@ -52,7 +51,7 @@ export default async function DealDetailPage({
       : null;
 
   return (
-    <AdminShell>
+    <>
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <Link
@@ -256,6 +255,6 @@ export default async function DealDetailPage({
           </button>
         </div>
       </form>
-    </AdminShell>
+    </>
   );
 }

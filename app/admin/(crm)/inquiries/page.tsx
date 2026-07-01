@@ -4,14 +4,13 @@ import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/types";
 
-import { AdminShell } from "../admin-shell";
 import {
   createContact,
   deleteContact,
   updateContactDetails,
-} from "../actions";
-import { dealStatuses } from "../constants";
-import { demoContacts, demoDeals } from "../demo-data";
+} from "../../actions";
+import { dealStatuses } from "../../constants";
+import { demoContacts, demoDeals } from "../../demo-data";
 
 type Contact = Database["public"]["Tables"]["contacts"]["Row"];
 type Deal = Database["public"]["Tables"]["deals"]["Row"];
@@ -72,7 +71,7 @@ export default async function AdminContactsPage({
   }
 
   return (
-    <AdminShell>
+    <>
       <div
         className={
           selectedContact || isAddingContact
@@ -188,7 +187,7 @@ export default async function AdminContactsPage({
           dealCount={selectedContact ? contactDeals.get(selectedContact.id)?.length ?? 0 : 0}
         />
       )}
-    </AdminShell>
+    </>
   );
 }
 

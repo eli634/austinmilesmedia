@@ -4,9 +4,8 @@ import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/types";
 
-import { AdminShell } from "./admin-shell";
-import { dealStatuses } from "./constants";
-import { demoBookings, demoDeals, demoInquiries } from "./demo-data";
+import { dealStatuses } from "../constants";
+import { demoBookings, demoDeals, demoInquiries } from "../demo-data";
 
 type Inquiry = Database["public"]["Tables"]["inquiries"]["Row"];
 type Deal = Database["public"]["Tables"]["deals"]["Row"];
@@ -111,7 +110,7 @@ export default async function AdminPage() {
   );
 
   return (
-    <AdminShell>
+    <>
       <div className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm lg:flex-row lg:items-end lg:justify-between lg:p-8">
         <div>
           <p className="mb-3 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-[#7b8da3]">
@@ -329,6 +328,6 @@ export default async function AdminPage() {
           )}
         </div>
       </section>
-    </AdminShell>
+    </>
   );
 }

@@ -2,10 +2,9 @@ import { Button } from "@/components/ui/button";
 import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
-import { AdminShell } from "../admin-shell";
-import { createBooking, updateBookingStatus } from "../actions";
-import { bookingStatuses } from "../constants";
-import { demoBookings, demoContacts, demoDeals } from "../demo-data";
+import { createBooking, updateBookingStatus } from "../../actions";
+import { bookingStatuses } from "../../constants";
+import { demoBookings, demoContacts, demoDeals } from "../../demo-data";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -73,7 +72,7 @@ export default async function AdminCalendarPage() {
   }
 
   return (
-    <AdminShell>
+    <>
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h1 className="font-body text-3xl font-black tracking-[-0.045em] text-[#0b4a7a]">
@@ -312,6 +311,6 @@ export default async function AdminCalendarPage() {
           </section>
         </aside>
       </div>
-    </AdminShell>
+    </>
   );
 }

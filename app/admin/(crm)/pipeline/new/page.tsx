@@ -4,10 +4,9 @@ import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { DealStatus } from "@/lib/supabase/types";
 
-import { createDealWithContact } from "../../actions";
-import { AdminShell } from "../../admin-shell";
-import { dealStatuses } from "../../constants";
-import { demoContacts } from "../../demo-data";
+import { createDealWithContact } from "../../../actions";
+import { dealStatuses } from "../../../constants";
+import { demoContacts } from "../../../demo-data";
 
 export default async function NewDealPage({
   searchParams,
@@ -28,7 +27,7 @@ export default async function NewDealPage({
     : null;
 
   return (
-    <AdminShell>
+    <>
       <div className="mb-6">
         <Link
           href="/admin/pipeline"
@@ -216,6 +215,6 @@ export default async function NewDealPage({
           </button>
         </div>
       </form>
-    </AdminShell>
+    </>
   );
 }

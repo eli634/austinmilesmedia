@@ -28,7 +28,5 @@ export async function createClient() {
     },
   );
 
-  await supabase.auth.getSession();
-
   return supabase;
 }
