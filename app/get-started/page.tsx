@@ -89,6 +89,12 @@ const goals: Option[] = [
 
 const stepLabels = ["Business", "Goal", "Details"];
 
+const panelClass =
+  "rounded-3xl border border-[#d8e3ef] bg-white shadow-[0_22px_70px_rgba(3,16,36,0.08)]";
+
+const fieldClass =
+  "w-full rounded-xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-[#0b4a7a] outline-none transition-colors placeholder:text-[#7b8da3] focus:border-[#0b4a7a]";
+
 function Stepper({ current }: { current: number }) {
   return (
     <div className="flex items-center justify-between">
@@ -102,9 +108,9 @@ function Stepper({ current }: { current: number }) {
                 className={cn(
                   "flex size-9 items-center justify-center rounded-full border font-body text-sm font-semibold transition-colors duration-300",
                   active &&
-                    "border-accent bg-accent text-ink shadow-[0_0_22px_rgba(248,251,255,0.28)]",
-                  done && "border-accent bg-accent text-ink",
-                  !active && !done && "border-creme/25 text-creme/50",
+                    "border-[#0b4a7a] bg-[#0b4a7a] text-white shadow-[0_8px_20px_rgba(11,74,122,0.22)]",
+                  done && "border-[#0b4a7a] bg-[#0b4a7a] text-white",
+                  !active && !done && "border-[#d8e3ef] bg-white text-[#7b8da3]",
                 )}
               >
                 {done ? "✓" : index + 1}
@@ -112,7 +118,7 @@ function Stepper({ current }: { current: number }) {
               <span
                 className={cn(
                   "font-body text-xs",
-                  active ? "text-creme" : "text-creme/45",
+                  active ? "font-semibold text-[#0b4a7a]" : "text-[#7b8da3]",
                 )}
               >
                 {label}
@@ -122,7 +128,7 @@ function Stepper({ current }: { current: number }) {
               <div
                 className={cn(
                   "mx-3 h-px flex-1 transition-colors duration-300",
-                  done ? "bg-accent" : "bg-creme/15",
+                  done ? "bg-[#0b4a7a]" : "bg-[#d8e3ef]",
                 )}
               />
             )}
@@ -156,26 +162,28 @@ function OptionList({
             className={cn(
               "flex w-full items-start gap-4 rounded-2xl border p-5 text-left transition-all duration-200 ease-expo",
               isSelected
-                ? "border-accent bg-accent/10"
-                : "border-creme/10 bg-creme/[0.03] hover:border-creme/25 hover:bg-creme/[0.05]",
+                ? "border-[#0b4a7a] bg-white shadow-[0_16px_40px_rgba(11,74,122,0.16)]"
+                : "border-[#c5d9ec] bg-[#f4f8fc] shadow-[0_8px_24px_rgba(11,74,122,0.08)] hover:-translate-y-0.5 hover:border-[#0b4a7a]/30 hover:bg-[#eef5ff] hover:shadow-[0_14px_32px_rgba(11,74,122,0.12)]",
             )}
           >
             <span
               className={cn(
                 "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors",
-                isSelected ? "border-accent" : "border-creme/30",
+                isSelected ? "border-[#0b4a7a]" : "border-[#c5d4e4]",
               )}
             >
-              {isSelected && <span className="size-2.5 rounded-full bg-accent" />}
+              {isSelected && (
+                <span className="size-2.5 rounded-full bg-[#0b4a7a]" />
+              )}
             </span>
             <span className="flex-1">
-              <span className="block font-body text-base font-semibold text-creme">
+              <span className="block font-body text-base font-semibold text-[#08294a]">
                 {option.label}
               </span>
-              <span className="mt-1 block font-body text-sm text-creme/55">
+              <span className="mt-1 block font-body text-sm text-[#52677f]">
                 {option.desc}
               </span>
-              <span className="mt-3 block font-body text-[0.68rem] uppercase tracking-[0.18em] text-creme/35">
+              <span className="mt-3 block font-body text-[0.68rem] uppercase tracking-[0.18em] text-[#7b8da3]">
                 {option.tag}
               </span>
             </span>
@@ -185,9 +193,6 @@ function OptionList({
     </div>
   );
 }
-
-const fieldClass =
-  "w-full rounded-xl border border-creme/15 bg-creme/[0.04] px-4 py-3 font-body text-creme outline-none transition-colors placeholder:text-creme/35 focus:border-accent";
 
 export default function GetStarted() {
   const [step, setStep] = useState(0);
@@ -233,7 +238,7 @@ export default function GetStarted() {
   };
 
   return (
-    <main className="relative z-10 min-h-screen">
+    <main className="relative min-h-screen text-[#08294a]">
       <header className="mx-auto flex w-full max-w-[760px] items-center justify-between px-5 py-6 sm:px-8">
         <Link
           href="/"
@@ -241,7 +246,7 @@ export default function GetStarted() {
           className="relative h-8 w-28 transition-opacity hover:opacity-80"
         >
           <Image
-            src="/amm-signature-white-transparent.png"
+            src="/amm-signature-dark.png"
             alt="Austin Miles Media"
             fill
             priority
@@ -251,7 +256,7 @@ export default function GetStarted() {
         </Link>
         <Link
           href="/"
-          className="font-body text-sm text-creme/50 transition-colors hover:text-creme"
+          className="font-body text-sm text-[#52677f] transition-colors hover:text-[#0b4a7a]"
         >
           Back to site
         </Link>
@@ -259,10 +264,14 @@ export default function GetStarted() {
 
       <div className="mx-auto w-full max-w-[760px] px-5 pb-24 pt-6 sm:px-8">
         {status === "done" ? (
-          <div className="glass-strong rounded-3xl p-8 text-center sm:p-14">
-            <p className="eyebrow mb-6">Inquiry received</p>
-            <h1 className="display text-creme">You&apos;re in.</h1>
-            <p className="body mx-auto mt-6 text-lg">
+          <div className={cn(panelClass, "p-8 text-center sm:p-14")}>
+            <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#7b8da3]">
+              Inquiry received
+            </p>
+            <h1 className="font-display text-[clamp(2.25rem,5vw,3.5rem)] font-extrabold leading-[0.95] tracking-[-0.055em] text-[#08294a]">
+              You&apos;re in.
+            </h1>
+            <p className="mx-auto mt-6 max-w-[52ch] font-body text-lg leading-relaxed text-[#52677f]">
               Thanks{form.name ? `, ${form.name.split(" ")[0]}` : ""}. Austin
               just got your inquiry. We&apos;ll review your{" "}
               {businessType ? businessType.toLowerCase() : "business"} and reach
@@ -275,17 +284,26 @@ export default function GetStarted() {
                 ["02", "We reach out", "A short message with next steps."],
                 ["03", "We get rolling", "Pick a lane and we start filming."],
               ].map(([n, t, d]) => (
-                <div key={t} className="glass rounded-2xl p-5">
-                  <p className="font-display text-sm font-bold text-accent">
+                <div
+                  key={t}
+                  className="rounded-2xl border border-[#d8e3ef] bg-[#f8fbff] p-5 shadow-[0_8px_24px_rgba(3,16,36,0.05)]"
+                >
+                  <p className="font-display text-sm font-bold text-[#0b4a7a]">
                     {n}
                   </p>
-                  <p className="mt-3 font-body font-semibold text-creme">{t}</p>
-                  <p className="mt-1 font-body text-sm text-creme/55">{d}</p>
+                  <p className="mt-3 font-body font-semibold text-[#08294a]">
+                    {t}
+                  </p>
+                  <p className="mt-1 font-body text-sm text-[#52677f]">{d}</p>
                 </div>
               ))}
             </div>
             <div className="mt-10">
-              <Button asChild size="lg">
+              <Button
+                asChild
+                size="lg"
+                className="border-[#0b4a7a] bg-[#0b4a7a] text-white hover:bg-[#08395e] hover:text-white"
+              >
                 <Link href="/">Back to home</Link>
               </Button>
             </div>
@@ -293,21 +311,29 @@ export default function GetStarted() {
         ) : (
           <>
             <div className="mb-10">
-              <h1 className="h2 text-creme">Get started</h1>
-              <p className="body mt-3">
+              <h1 className="font-display text-[clamp(2rem,4vw,3rem)] font-extrabold leading-[0.95] tracking-[-0.055em] text-[#08294a]">
+                Get started
+              </h1>
+              <p className="mt-3 font-body text-lg text-[#52677f]">
                 Three quick steps. No commitment — just tells us how to help.
               </p>
             </div>
 
-            <div className="mb-10 glass rounded-2xl p-5">
+            <div
+              className={cn(
+                "mb-10 rounded-2xl border border-[#c5d9ec] bg-[#f4f8fc] p-5 shadow-[0_8px_24px_rgba(11,74,122,0.06)]",
+              )}
+            >
               <Stepper current={step} />
             </div>
 
-            <div className="glass-strong rounded-3xl p-6 sm:p-8">
+            <div className={cn(panelClass, "p-6 sm:p-8")}>
               {step === 0 && (
                 <>
-                  <h2 className="h3 text-creme">What kind of business?</h2>
-                  <p className="body mt-2 mb-7 text-sm">
+                  <h2 className="font-display text-2xl font-extrabold tracking-[-0.04em] text-[#08294a] sm:text-3xl">
+                    What kind of business?
+                  </h2>
+                  <p className="mt-2 mb-7 font-body text-sm text-[#52677f]">
                     This helps us tailor the content to how you actually get
                     customers.
                   </p>
@@ -321,8 +347,10 @@ export default function GetStarted() {
 
               {step === 1 && (
                 <>
-                  <h2 className="h3 text-creme">What&apos;s your main goal?</h2>
-                  <p className="body mt-2 mb-7 text-sm">
+                  <h2 className="font-display text-2xl font-extrabold tracking-[-0.04em] text-[#08294a] sm:text-3xl">
+                    What&apos;s your main goal?
+                  </h2>
+                  <p className="mt-2 mb-7 font-body text-sm text-[#52677f]">
                     Pick the outcome that matters most right now.
                   </p>
                   <OptionList
@@ -335,8 +363,10 @@ export default function GetStarted() {
 
               {step === 2 && (
                 <>
-                  <h2 className="h3 text-creme">Where should we reach you?</h2>
-                  <p className="body mt-2 mb-7 text-sm">
+                  <h2 className="font-display text-2xl font-extrabold tracking-[-0.04em] text-[#08294a] sm:text-3xl">
+                    Where should we reach you?
+                  </h2>
+                  <p className="mt-2 mb-7 font-body text-sm text-[#52677f]">
                     Drop your details and your page. We&apos;ll review it and
                     follow up with the clearest next step.
                   </p>
@@ -394,14 +424,19 @@ export default function GetStarted() {
               )}
 
               {error && (
-                <p className="mt-5 font-body text-sm text-accent">{error}</p>
+                <p className="mt-5 font-body text-sm font-semibold text-[#0b4a7a]">
+                  {error}
+                </p>
               )}
 
-              <div className="mt-8 flex items-center justify-between border-t border-creme/10 pt-6">
+              <div className="mt-8 flex items-center justify-between border-t border-[#e7eef7] pt-6">
                 <Button
                   variant="link"
                   onClick={() => setStep((s) => Math.max(0, s - 1))}
-                  className={cn(step === 0 && "pointer-events-none opacity-0")}
+                  className={cn(
+                    "text-[#52677f] hover:text-[#0b4a7a]",
+                    step === 0 && "pointer-events-none opacity-0",
+                  )}
                 >
                   ← Back
                 </Button>
@@ -410,6 +445,7 @@ export default function GetStarted() {
                   <Button
                     disabled={!canContinue}
                     onClick={() => setStep((s) => s + 1)}
+                    className="border-[#0b4a7a] bg-[#0b4a7a] text-white hover:bg-[#08395e] hover:text-white disabled:border-[#b7c8d8] disabled:bg-[#b7c8d8]"
                   >
                     Continue →
                   </Button>
@@ -417,6 +453,7 @@ export default function GetStarted() {
                   <Button
                     disabled={!canContinue || status === "submitting"}
                     onClick={submit}
+                    className="border-[#0b4a7a] bg-[#0b4a7a] text-white hover:bg-[#08395e] hover:text-white disabled:border-[#b7c8d8] disabled:bg-[#b7c8d8]"
                   >
                     {status === "submitting" ? "Sending…" : "Submit inquiry →"}
                   </Button>
@@ -424,7 +461,7 @@ export default function GetStarted() {
               </div>
             </div>
 
-            <p className="mt-6 text-center font-body text-xs text-creme/40">
+            <p className="mt-6 text-center font-body text-xs text-[#7b8da3]">
               Step {step + 1} of 3
             </p>
           </>
