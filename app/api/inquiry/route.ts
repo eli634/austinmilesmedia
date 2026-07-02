@@ -139,7 +139,7 @@ export async function POST(request: Request) {
     ["Primary goal", data.goal],
     ["Name", name],
     ["Business", data.business],
-    ["Handle / website", data.handle],
+    ["Website", data.handle],
     ["Email", email],
     ["Phone", data.phone],
     ["Message", data.message],

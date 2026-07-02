@@ -2,60 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { CustomerMarquee } from "./customer-marquee";
 import { Hero } from "./hero";
 import { HowItWorks } from "./how-it-works";
 import { Nav } from "./nav";
-
-const customers = [
-  {
-    name: "Kooks Headers",
-    logo: "/customer-logos/kooks-headers.png",
-  },
-  {
-    name: "Hubbard Clothing Co",
-  },
-  {
-    name: "Wood Motor Co",
-  },
-  {
-    name: "Landers Toyota NWA",
-  },
-  {
-    name: "Honey Brake",
-    logo: "/customer-logos/honey-brake.png",
-  },
-  {
-    name: "TMPL",
-    logo: "/customer-logos/tmpl.png",
-  },
-  {
-    name: "Palm Beach Sports Clubs",
-    logo: "/customer-logos/palm-beach-sports-clubs.png",
-  },
-  {
-    name: "Boss Hawg Offroad",
-    logo: "/customer-logos/boss-hawg-offroad.jpg",
-  },
-  {
-    name: "SEC",
-    logo: "/customer-logos/sec.png",
-  },
-  {
-    name: "Carlisle Watch Co",
-  },
-  {
-    name: "NASCAR",
-    logo: "/customer-logos/nascar.png",
-  },
-  {
-    name: "Lindsey Management",
-    logo: "/customer-logos/lindsey-management.png",
-  },
-  {
-    name: "Treasure Island Outfitters",
-    logo: "/customer-logos/treasure-island-outfitters.png",
-  },
-];
 
 const leadBenefitBody =
   "No brief to write, no camera to hold, no editor to learn, no freelancer to babysit. The crew shows up, films on site, and cuts everything in-house. It ships looking like Austin shot it, or it doesn\u2019t ship. Hundreds of pieces a month, none of it on your desk.";
@@ -122,36 +72,7 @@ export default function Home() {
       <Nav />
       <Hero />
 
-      {/* CUSTOMERS */}
-      <section aria-label="Trusted operators" className="relative z-10 pb-8 pt-2 lg:pb-10 lg:pt-2">
-        <p className="mx-auto mb-5 max-w-[28ch] px-5 text-center font-body text-xl font-medium leading-tight tracking-[-0.04em] text-creme/70 sm:max-w-none sm:text-2xl lg:text-3xl">
-          Trusted by{" "}
-          <span className="font-bold text-creme">industry leaders</span> across
-          the country
-        </p>
-        <div className="edge-fade overflow-hidden">
-          <div className="marquee gap-16 pr-16">
-            {[...customers, ...customers].map((customer, index) => (
-              <span
-                key={`${customer.name}-${index}`}
-                className="flex shrink-0 items-center gap-3 whitespace-nowrap font-body text-lg font-semibold tracking-tight text-creme/35 transition-colors duration-300 hover:text-creme/70"
-              >
-                {customer.logo && (
-                  <Image
-                    src={customer.logo}
-                    alt=""
-                    aria-hidden
-                    width={34}
-                    height={34}
-                    className="size-7 object-contain opacity-45 grayscale contrast-125 transition-opacity duration-300 hover:opacity-70"
-                  />
-                )}
-                {customer.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+      <CustomerMarquee />
 
       {/* LEAD BENEFIT */}
       <section className="relative z-10 mx-auto grid w-full max-w-[1320px] gap-10 px-5 py-28 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:px-10 lg:py-36">

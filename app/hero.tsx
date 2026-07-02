@@ -42,6 +42,36 @@ export function Hero() {
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent via-ink/70 to-ink"
         />
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <div className="mx-auto w-full max-w-[1320px] px-5 text-center sm:px-8 lg:px-10">
+            <motion.h1
+              {...rise(0.06)}
+              className="display mx-auto max-w-[12ch] text-creme drop-shadow-[0_8px_32px_rgba(2,7,19,0.55)]"
+            >
+              Filmed at full speed.
+            </motion.h1>
+
+            <motion.p
+              {...rise(0.12)}
+              className="body mx-auto mt-4 max-w-[52ch] text-lg drop-shadow-[0_4px_24px_rgba(2,7,19,0.45)]"
+            >
+              Show the work up close, the way it actually looks when you do it,
+              and people stop asking what you charge. They start asking if
+              you&apos;re available.
+            </motion.p>
+
+            <motion.div
+              {...rise(0.18)}
+              className="mt-5 flex justify-center"
+            >
+              <MotionButton
+                href="/get-started"
+                label="Get started"
+                shouldReduceMotion={shouldReduceMotion}
+              />
+            </motion.div>
+          </div>
+        </div>
         <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center px-5">
           <motion.a
             href="#hero-copy"
