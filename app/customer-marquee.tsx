@@ -6,46 +6,39 @@ type Customer = {
   name: string;
   logo?: string;
   logoClass?: string;
+  /** Logo carries the brand name, so skip the visible text label. */
+  logoOnly?: boolean;
 };
 
 export const customers: Customer[] = [
-  {
-    name: "Kooks Headers",
-    logo: "/customer-logos/kooks-headers.png",
-    logoClass: "h-9 w-9",
-  },
+  { name: "Kooks Headers" },
   { name: "Hubbard Clothing Co" },
-  {
-    name: "Wood Motor Co",
-    logo: "/customer-logos/wood-motor-co.png",
-    logoClass: "h-8 w-auto max-w-[6.75rem]",
-  },
+  { name: "Wood Motor Co" },
   { name: "Landers Toyota NWA" },
   {
-    name: "McLarty Daniel Toyota",
-    logo: "/customer-logos/mclarty-daniel-toyota.png",
-    logoClass: "h-12 w-12",
+    name: "McLarty Daniel",
+    logo: "/customer-logos/mclarty-daniel.png",
+    logoClass: "h-7 w-auto max-w-[12rem]",
+    logoOnly: true,
   },
   {
     name: "Honey Brake",
     logo: "/customer-logos/honey-brake.png",
-    logoClass: "size-7 max-w-7",
+    logoClass: "h-9 w-auto max-w-[8rem]",
+    logoOnly: true,
   },
   {
     name: "TMPL",
     logo: "/customer-logos/tmpl.png",
-    logoClass: "h-9 w-9",
+    logoClass: "h-11 w-11",
+    logoOnly: true,
   },
   {
     name: "Palm Beach Sports Clubs",
     logo: "/customer-logos/palm-beach-sports-clubs.png",
     logoClass: "h-9 w-auto max-w-[4.5rem]",
   },
-  {
-    name: "Boss Hawg Offroad",
-    logo: "/customer-logos/boss-hawg-offroad.png",
-    logoClass: "h-9 w-auto max-w-[8rem]",
-  },
+  { name: "Boss Hawg Offroad" },
   {
     name: "SEC",
     logo: "/customer-logos/sec.png",
@@ -64,13 +57,10 @@ export const customers: Customer[] = [
   {
     name: "Lindsey Management",
     logo: "/customer-logos/lindsey-management.png",
-    logoClass: "h-9 w-auto max-w-[9rem]",
+    logoClass: "h-10 w-auto max-w-[9rem]",
+    logoOnly: true,
   },
-  {
-    name: "Treasure Island Outfitters",
-    logo: "/customer-logos/treasure-island-outfitters.png",
-    logoClass: "h-9 w-9",
-  },
+  { name: "Treasure Island Outfitters" },
 ];
 
 const logoClassName =
@@ -99,17 +89,21 @@ export function CustomerMarquee() {
                   src={customer.logo}
                   alt=""
                   aria-hidden
-                  width={120}
-                  height={36}
+                  width={160}
+                  height={48}
                   className={cn(
                     logoClassName,
                     customer.logoClass ?? "h-9 w-auto max-w-[7rem]",
                   )}
                 />
               )}
-              <span className="font-body text-lg font-semibold tracking-tight text-creme/35 transition-colors duration-300 group-hover:text-creme/70">
-                {customer.name}
-              </span>
+              {customer.logo && customer.logoOnly ? (
+                <span className="sr-only">{customer.name}</span>
+              ) : (
+                <span className="font-body text-lg font-semibold tracking-tight text-creme/35 transition-colors duration-300 group-hover:text-creme/70">
+                  {customer.name}
+                </span>
+              )}
             </span>
           ))}
         </div>

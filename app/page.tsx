@@ -8,23 +8,23 @@ import { HowItWorks } from "./how-it-works";
 import { Nav } from "./nav";
 
 const leadBenefitBody =
-  "No brief to write, no camera to hold, no editor to learn, no freelancer to babysit. The crew shows up, films on site, and cuts everything in-house. It ships looking like Austin shot it, or it doesn\u2019t ship. Hundreds of pieces a month, none of it on your desk.";
+  "Full social media management from one lean, efficient team. We plan it, film it, edit it, and post it \u2014 no brief to write, no freelancer to babysit. The content isn\u2019t the point. It\u2019s the engine that builds your name and gets bigger deals done, without any of it landing on your desk.";
 
 const services = [
   {
     index: "01",
-    title: "Content only",
+    title: "Content",
     body: "We come to you, shoot on site, and hand off finished, ready-to-post video. You run distribution. Same crew every time, and you stay in control.",
   },
   {
     index: "02",
-    title: "Managed",
-    body: "We film, we edit, and we run the calendar: posting, formats, cadence, all handled. You approve, we ship. The volume runs without you touching it.",
+    title: "Content + management",
+    body: "We film, we edit, and we run your social media: posting, formats, cadence, all handled. You approve, we ship. Everything runs without you touching it.",
   },
   {
     index: "03",
     title: "Full white-glove",
-    body: "The whole operation, off your plate. Strategy, filming, editing, posting, and reporting, run by the crew and signed off by Austin before anything goes live. You get the booked jobs and a portal that shows exactly what\u2019s working.",
+    body: "The whole operation, off your plate. Strategy, filming, editing, posting, and reporting, run by one efficient team and signed off by Austin before anything goes live. You get a brand that never goes quiet and a portal that shows exactly what\u2019s working.",
     flagship: true,
   },
 ];
@@ -32,39 +32,39 @@ const services = [
 const reels = ["Roofing", "HVAC", "Custom builders", "Sports"];
 
 const founderQuote =
-  "\u201CNothing ships that I wouldn\u2019t put my own name on. And there\u2019s no one between you and the people making it.\u201D";
+  "\u201CNothing ships that I wouldn\u2019t put my own name on.\u201D";
 
 const founderBody = [
-  "Austin Miles started shooting at 15. While everyone else was hunting a first job, he was filming six car dealerships and shooting sports on the weekends. That\u2019s nine years behind a camera before most people own one.",
-  "Today he runs a tight crew, small on purpose. Not juniors learning on your account, not an offshore edit farm, not whoever\u2019s cheapest this quarter. The same hands on every shoot, people he\u2019s worked with for years, all cut to one rule: it ships looking like he shot it himself, or it doesn\u2019t ship.",
-  "That\u2019s the trade. You\u2019re not paying for a freelancer\u2019s calendar or an agency\u2019s overhead. You\u2019re paying for a crew that\u2019s already good and a bar that doesn\u2019t move, with no account-manager wall between you and the work.",
+  "Austin has spent nine years behind a camera, across a wider range of industries than most agencies ever see: car dealerships, NASCAR drivers, professional businesses, real estate, and hunting lodges.",
+  "The goal has never been to just hand you cool videos. It\u2019s to learn your business \u2014 how you get customers, what a good month looks like \u2014 and build content that actually feeds it.",
+  "A lot of businesses hire a content guy to point and film. With us, you get a creative direction team that learns the business first and shoots second.",
 ];
 
 const objections = [
   {
     q: "Is this worth what it costs?",
-    a: "Compare it to the real alternative: a videographer day rate, plus an editor, plus your time managing both, for a fraction of the output. One job booked off one video usually covers the month. You\u2019re not buying content. You\u2019re buying the jobs it brings in.",
+    a: "We run a lean, efficient team \u2014 no agency layers, no bloated production days, no overhead you\u2019re quietly paying for. You get the output of a full content and social media operation for a fraction of what staffing it yourself would cost, and every dollar goes to people actually doing the work.",
   },
   {
     q: "I don\u2019t want to be locked into a retainer.",
-    a: "The retainer buys you volume and a standing crew, not a cage. We run 3, 6, and 12-month terms, and you watch the work stack up in your portal the whole way. If it isn\u2019t booking jobs, you\u2019ll see it there before you feel it.",
+    a: "The retainer buys you volume and a standing crew, not a cage. We run 3, 6, and 12-month terms, and you watch the work stack up in your portal the whole way. If it isn\u2019t working, you\u2019ll see it there before you feel it.",
   },
   {
     q: "I hate being on camera.",
-    a: "Most of what we shoot has you on camera for none of it: job sites, crews, before-and-afters, the work itself. Want to be on screen? We make it quick and painless. Never want to? The content still books jobs. Your call.",
+    a: "Most of what we shoot has you on camera for none of it: job sites, crews, before-and-afters, the work itself. Want to be on screen? We make it quick and painless. Never want to? The content still works. Your call.",
   },
   {
-    q: "Will this actually book jobs, or just get likes?",
-    a: "Likes don\u2019t fill your schedule. We shoot for the homeowner who\u2019s about to call someone. Proof, process, finished jobs, not a viral moment. Every piece is built to move someone from scrolling to scheduling, and the portal shows you what\u2019s converting.",
+    q: "Will this actually bring in business, or just get likes?",
+    a: "Likes aren\u2019t the goal. We build content for the people ready to buy: proof, process, finished work. That\u2019s what generates real attention and real inquiries. Closing them stays your side of the fence \u2014 our job is making sure your phone keeps ringing and your name keeps coming up.",
   },
   {
     q: "My last agency took my money and disappeared.",
-    a: "Fair. That\u2019s the whole reason we\u2019re built the way we are. No offshore handoff, no account-manager wall, no rotating cast. You deal with the crew making your content and with Austin, who sets the bar they cut to. Everything you pay for shows up in one portal: what we shot, what shipped, what it\u2019s doing. No black box, no ghosting, no \u201Cwe\u2019ll circle back.\u201D",
+    a: "Fair. That\u2019s why everything we do stays visible. You get a dedicated point of contact who actually answers, a direct line to the team making your content, and a portal that shows what we shot, what shipped, and what it\u2019s doing. No black box, no ghosting, no \u201Cwe\u2019ll circle back.\u201D",
   },
 ];
 
 const ctaOffer =
-  "Point us at your socials and your service area. We\u2019ll come back with the actual content we\u2019d post for you, built around the jobs you want to book more of. No cost, no pitch deck. Like what you see, we scale it.";
+  "Book a call and we\u2019ll walk you through exactly how we\u2019d help. No cost, no pitch deck.";
 
 export default function Home() {
   return (
@@ -81,7 +81,7 @@ export default function Home() {
               The operation
             </p>
             <h2 className="h2 max-w-[18ch]">
-              We run your content engine.
+              We run your social media.
             </h2>
           </div>
           <p className="body text-lg lg:pb-2">
@@ -103,7 +103,7 @@ export default function Home() {
               <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
                 How we work together
               </p>
-              <h2 className="h2 max-w-[16ch] text-[#08294a]">
+              <h2 className="h2 max-w-[24ch] text-[#08294a]">
                 Three ways to run your content.
               </h2>
             </div>
@@ -159,10 +159,10 @@ export default function Home() {
           <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
-                Work by industry
+                The work
               </p>
               <h2 className="h2 max-w-[14ch] text-[#08294a]">
-                See work from your industry.
+                See our work.
               </h2>
             </div>
           </div>
@@ -187,14 +187,6 @@ export default function Home() {
                       ▶
                     </span>
                   </div>
-                </div>
-                <div className="flex items-center justify-between px-1 pt-4">
-                  <span className="font-body text-sm font-semibold text-[#08294a]">
-                    {label}
-                  </span>
-                  <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-[#607086]">
-                    Reel
-                  </span>
                 </div>
               </div>
             ))}
@@ -316,18 +308,6 @@ export default function Home() {
                 className="font-body text-sm text-creme/60 transition-colors hover:text-creme"
               >
                 hello@austinmilesmedia.com
-              </Link>
-              <Link
-                href="#missing-ig-url"
-                className="font-body text-sm text-creme/60 transition-colors hover:text-creme"
-              >
-                Instagram
-              </Link>
-              <Link
-                href="#missing-yt-url"
-                className="font-body text-sm text-creme/60 transition-colors hover:text-creme"
-              >
-                YouTube
               </Link>
             </div>
             <p className="font-body text-sm text-creme/40">

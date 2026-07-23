@@ -165,12 +165,12 @@ function CameraVisual() {
 const stages = [
   {
     title: "On-site shoot",
-    sub: "We come to you. One day, on the job.",
+    sub: "On-site at your location.",
     visual: <CameraVisual />,
   },
   {
     title: "Short-form clips",
-    sub: "One shoot, cut into dozens of pieces.",
+    sub: "Fresh content, filmed consistently.",
     visual: <ClipGrid />,
   },
   {
@@ -180,25 +180,25 @@ const stages = [
   },
   {
     title: "Steady output",
-    sub: "Hundreds of pieces a month, on a schedule.",
+    sub: "Consistent, high-quality content every month.",
     visual: <CadenceBars />,
   },
 ];
 
-const arrowLabels = ["We film", "We cut", "You post"];
+const arrowLabels = ["We film", "We cut", "We post"];
 
 const features = [
   {
-    title: "Filmed in-house",
-    body: "No outsourcing, no rotating freelancers. The same crew shoots every job, so they already know your brand, your trucks, and your guys before they show up. By the third shoot they\u2019re not learning your business, they\u2019re just shooting it.",
+    title: "We film the videos",
+    body: "You don\u2019t hire a camera guy, learn an editor, or manage a freelancer. Our crew films your videos and handles the edit, and the same people show up every time \u2014 by the third shoot they\u2019re not learning your business, they\u2019re just shooting it.",
   },
   {
-    title: "Direct access, no middlemen",
-    body: "You deal with the crew shooting your content, not an account manager relaying messages. Austin sets the standard, and nothing goes out until it\u2019s met. When you need something, you reach the crew direct.",
+    title: "Direct access, real management",
+    body: "You get a dedicated account manager who knows your business and a direct line to the team making your content. Questions get answered, requests get handled, and Austin signs off before anything ships.",
   },
   {
-    title: "Built for booked jobs",
-    body: "We build content around the work you want more of: the high-margin roofs, the big installs, the custom builds. We\u2019re not chasing views, we\u2019re chasing the jobs that pay. That\u2019s who ends up calling.",
+    title: "Content that compounds",
+    body: "Every shoot feeds a library of consistent, high-quality content built around the work you want more of. We\u2019re not chasing views for their own sake \u2014 we\u2019re building a feed that sells your business every day it\u2019s posted.",
   },
 ];
 
