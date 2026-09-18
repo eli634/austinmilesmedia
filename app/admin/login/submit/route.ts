@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { setDefaultResultOrder } from "node:dns";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { createAdminClient, hasAdminSupabaseEnv } from "@/lib/supabase/admin";
@@ -8,6 +9,22 @@ import {
   hasSupabaseEnv,
 } from "@/lib/supabase/env";
 import type { Database } from "@/lib/supabase/types";
+
+export const runtime = "nodejs";
+export const maxDuration = 30;
+
+setDefaultResultOrder("ipv4first");
+
+async function authFetch(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+) {
+  try {
+    return await fetch(input, init);
+  } catch {
+    return await fetch(input, init);
+  }
+}
 
 function loginRedirect(request: NextRequest, message: string) {
   const url = new URL("/admin/login", request.url);
@@ -51,6 +68,9 @@ export async function POST(request: NextRequest) {
           });
         },
       },
+      global: {
+        fetch: authFetch,
+      },
     },
   );
 
@@ -70,7 +90,18 @@ export async function POST(request: NextRequest) {
   ]);
 
   if (result.error) {
-    return loginRedirect(request, result.error.message);
+    const message = result.error.message;
+    const unreachable =
+      /fetch failed|failed to fetch|enotfound|econnrefused|network/i.test(
+        message,
+      );
+
+    return loginRedirect(
+      request,
+      unreachable
+        ? "Could not reach Supabase. Check that NEXT_PUBLIC_SUPABASE_URL points at a live project."
+        : message,
+    );
   }
 
   const user = "data" in result ? result.data.user : null;
