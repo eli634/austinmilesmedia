@@ -113,10 +113,7 @@ export default async function AdminPage() {
     <>
       <div className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm lg:flex-row lg:items-end lg:justify-between lg:p-8">
         <div>
-          <p className="mb-3 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-[#7b8da3]">
-            Austin CRM
-          </p>
-          <h1 className="font-display text-4xl font-black tracking-[-0.055em] text-[#0b4a7a] lg:text-5xl">
+          <h1 className="font-display text-2xl font-black tracking-[-0.04em] text-[#0b4a7a] lg:text-3xl">
             Austin&apos;s dashboard
           </h1>
         </div>
@@ -144,7 +141,7 @@ export default async function AdminPage() {
             <p className="font-body text-sm font-semibold text-[#52677f]">
               {metric.label}
             </p>
-            <p className="mt-4 font-display text-4xl font-black tracking-[-0.06em] text-[#0b4a7a]">
+            <p className="mt-3 font-display text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
               {metric.value}
             </p>
             <p className="mt-2 font-body text-xs font-medium text-[#7b8da3]">
@@ -158,10 +155,7 @@ export default async function AdminPage() {
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-                Needs action
-              </p>
-              <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+              <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
                 Recent inquiries
               </h2>
             </div>
@@ -208,10 +202,7 @@ export default async function AdminPage() {
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-                Schedule
-              </p>
-              <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+              <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
                 Next bookings
               </h2>
             </div>
@@ -248,10 +239,7 @@ export default async function AdminPage() {
       <section className="mt-6 rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              Pipeline
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
               Deal flow by stage
             </h2>
           </div>
@@ -285,7 +273,7 @@ export default async function AdminPage() {
                     {stageDeals.length}
                   </span>
                 </div>
-                <p className="mt-4 font-display text-3xl font-black tracking-[-0.055em] text-[#0b4a7a]">
+                <p className="mt-3 font-display text-xl font-black tracking-[-0.03em] text-[#0b4a7a]">
                   {formatMoney(stageValue)}
                 </p>
                 <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#e1ebf5]">

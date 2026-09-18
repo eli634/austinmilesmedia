@@ -117,7 +117,7 @@ export default async function AdminPipelinePage({
       >
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="font-body text-3xl font-black tracking-[-0.045em] text-[#0b4a7a]">
+            <h1 className="font-body text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
               Sales Pipeline
             </h1>
             <p className="mt-1 font-body text-sm text-[#52677f]">
@@ -220,7 +220,7 @@ function MetricCard({
         <p className="font-body text-sm font-medium text-[#52677f]">{label}</p>
       </div>
       <p
-        className={`mt-5 font-body text-3xl font-black tracking-[-0.04em] ${
+        className={`mt-4 font-body text-2xl font-black tracking-[-0.04em] ${
           tone === "teal" ? "text-[#0b4a7a]" : "text-[#0b4a7a]"
         }`}
       >
@@ -256,10 +256,7 @@ function DealQuickEditModal({
 
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              Deal details
-            </p>
-            <h2 className="mt-2 font-display text-3xl font-black tracking-[-0.055em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-black tracking-[-0.03em] text-[#0b4a7a]">
               {deal.title}
             </h2>
           </div>
@@ -340,7 +337,7 @@ function DealQuickEditModal({
 
           <section className="grid content-start gap-4 rounded-3xl border border-[#dbe6f1] bg-[#f8fbff] p-4">
             <div>
-              <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-[#7b8da3]">
+              <p className="font-body text-sm font-bold text-[#0b4a7a]">
                 Synced contact
               </p>
               <p className="mt-2 font-body text-sm font-semibold text-[#52677f]">

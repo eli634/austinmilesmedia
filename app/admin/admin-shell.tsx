@@ -1,8 +1,17 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { useState, type ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
 
 import { signOut } from "./actions";
+import {
+  ADMIN_SIDEBAR_COLLAPSED_VALUE,
+  ADMIN_SIDEBAR_COOKIE,
+} from "./constants";
 
 const adminLinks = [
   { label: "Dashboard", href: "/admin", icon: "dashboard" },
@@ -22,6 +31,7 @@ function AdminIcon({ name }: { name: string }) {
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
     "aria-hidden": true,
+    className: "pointer-events-none",
   };
 
   switch (name) {
@@ -61,30 +71,74 @@ function AdminIcon({ name }: { name: string }) {
           <path d="M3 10h18" />
         </svg>
       );
-    case "analytics":
+    case "collapse":
       return (
         <svg {...common}>
-          <path d="M4 19V5" />
-          <path d="M4 19h16" />
-          <path d="M8 16v-5" />
-          <path d="M12 16V8" />
-          <path d="M16 16v-3" />
+          <path d="M11 17 6 12l5-5" />
+          <path d="M18 17l-5-5 5-5" />
+        </svg>
+      );
+    case "expand":
+      return (
+        <svg {...common}>
+          <path d="M13 7l5 5-5 5" />
+          <path d="M6 7l5 5-5 5" />
+        </svg>
+      );
+    case "signout":
+      return (
+        <svg {...common}>
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <path d="M16 17l5-5-5-5" />
+          <path d="M21 12H9" />
         </svg>
       );
     default:
       return (
         <svg {...common}>
           <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.04.04a2 2 0 1 1-2.83 2.83l-.04-.04A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.08a1.7 1.7 0 0 0-.4-1.1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.04.04a2 2 0 1 1-2.83-2.83l.04-.04A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.08a1.7 1.7 0 0 0 1.1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.04-.04a2 2 0 1 1 2.83-2.83l.04.04A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.08a1.7 1.7 0 0 0 .4 1.1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.04-.04a2 2 0 1 1 2.83 2.83l-.04.04A1.7 1.7 0 0 0 19.4 9c.37.2.7.47 1 .8.3.3.57.63.8 1H21a2 2 0 1 1 0 4h-.08a1.7 1.7 0 0 0-1.1.4 1.7 1.7 0 0 0-.42-.2Z" />
         </svg>
       );
   }
 }
 
-export function AdminShell({ children }: { children: ReactNode }) {
+function isActivePath(pathname: string, href: string) {
+  if (href === "/admin") {
+    return pathname === "/admin";
+  }
+
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function persistSidebarCollapsed(collapsed: boolean) {
+  document.cookie = `${ADMIN_SIDEBAR_COOKIE}=${collapsed ? ADMIN_SIDEBAR_COLLAPSED_VALUE : "expanded"}; Path=/; Max-Age=31536000; SameSite=Lax`;
+}
+
+export function AdminShell({
+  children,
+  initialCollapsed = false,
+}: {
+  children: ReactNode;
+  initialCollapsed?: boolean;
+}) {
+  const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(initialCollapsed);
+
+  const toggleCollapsed = () => {
+    const next = !collapsed;
+    setCollapsed(next);
+    persistSidebarCollapsed(next);
+  };
+
   return (
     <main className="relative z-10 min-h-screen bg-[#f6f9fc] text-[#0b4a7a]">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-56 flex-col overflow-hidden border-r border-white/10 bg-ink text-creme lg:flex">
+      <aside
+        id="admin-sidebar"
+        className={cn(
+          "fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden border-r border-white/10 bg-ink text-creme transition-[width] duration-300 ease-expo motion-reduce:transition-none lg:flex",
+          collapsed ? "w-[4.5rem]" : "w-56",
+        )}
+      >
         <div
           aria-hidden
           className="pointer-events-none absolute -left-28 -top-28 size-72 rounded-full bg-[radial-gradient(closest-side,rgba(248,251,255,0.16),rgba(70,205,240,0.08),transparent)] blur-xl"
@@ -94,57 +148,124 @@ export function AdminShell({ children }: { children: ReactNode }) {
           className="pointer-events-none absolute bottom-24 left-1/2 h-80 w-72 -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(70,205,240,0.11),transparent)] blur-2xl"
         />
 
-        <div className="relative z-10 flex h-20 items-center px-5">
-          <Link
-            href="/admin"
-            aria-label="Austin Miles Media admin"
-            className="relative h-10 w-32"
+        <div
+          className={cn(
+            "relative z-10 flex h-20 items-center",
+            collapsed ? "justify-center px-2" : "justify-between px-3",
+          )}
+        >
+          {collapsed ? null : (
+            <Link
+              href="/admin"
+              aria-label="Austin Miles Media admin"
+              className="relative h-10 w-32"
+            >
+              <Image
+                src="/amm-signature-white-transparent.png"
+                alt="Austin Miles Media"
+                fill
+                priority
+                sizes="128px"
+                className="object-contain object-left"
+              />
+            </Link>
+          )}
+          <button
+            type="button"
+            aria-controls="admin-sidebar"
+            aria-expanded={!collapsed}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={toggleCollapsed}
+            className="flex size-8 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-creme/70 transition-colors hover:border-white/20 hover:bg-white/[0.08] hover:text-creme"
           >
-            <Image
-              src="/amm-signature-white-transparent.png"
-              alt="Austin Miles Media"
-              fill
-              priority
-              sizes="128px"
-              className="object-contain object-left"
-            />
-          </Link>
+            <AdminIcon name={collapsed ? "expand" : "collapse"} />
+          </button>
         </div>
 
-        <nav className="relative z-10 flex flex-1 flex-col gap-1.5 px-3 py-2">
-          {adminLinks.map((link) => (
-            <Link
-              key={`${link.label}-${link.href}`}
-              href={link.href}
-              prefetch
-              className="group flex items-center gap-3 rounded-2xl px-3 py-3 font-body text-sm font-semibold text-creme/62 transition-colors hover:bg-white/10 hover:text-creme"
-            >
-              <span className="flex size-8 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-creme/42 transition-colors group-hover:border-white/20 group-hover:bg-white/[0.08] group-hover:text-creme">
-                <AdminIcon name={link.icon} />
-              </span>
-              {link.label}
-            </Link>
-          ))}
+        <nav
+          className={cn(
+            "relative z-10 flex flex-1 flex-col gap-1.5 py-2",
+            collapsed ? "px-2" : "px-3",
+          )}
+        >
+          {adminLinks.map((link) => {
+            const active = isActivePath(pathname, link.href);
+
+            return (
+              <Link
+                key={`${link.label}-${link.href}`}
+                href={link.href}
+                prefetch
+                title={collapsed ? link.label : undefined}
+                aria-current={active ? "page" : undefined}
+                aria-label={collapsed ? link.label : undefined}
+                className={cn(
+                  "group flex items-center rounded-2xl py-3 font-body text-sm font-semibold transition-colors",
+                  collapsed ? "justify-center px-0" : "gap-3 px-3",
+                  active
+                    ? "bg-white/10 text-creme"
+                    : "text-creme/62 hover:bg-white/10 hover:text-creme",
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex size-8 shrink-0 items-center justify-center rounded-xl border transition-colors",
+                    active
+                      ? "border-white/20 bg-white/[0.08] text-creme"
+                      : "border-white/10 bg-white/[0.04] text-creme/42 group-hover:border-white/20 group-hover:bg-white/[0.08] group-hover:text-creme",
+                  )}
+                >
+                  <AdminIcon name={link.icon} />
+                </span>
+                <span
+                  aria-hidden={collapsed}
+                  className={cn(
+                    "overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-expo motion-reduce:transition-none",
+                    collapsed ? "max-w-0 opacity-0" : "max-w-[9rem] opacity-100",
+                  )}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="relative z-10 border-t border-white/10 p-4">
-          <div className="mb-3 flex items-center gap-3">
-            <span className="flex size-8 items-center justify-center rounded-full bg-white/10 font-body text-xs font-bold text-creme">
+        <div
+          className={cn(
+            "relative z-10 border-t border-white/10",
+            collapsed ? "p-2" : "p-4",
+          )}
+        >
+          <div
+            className={cn(
+              "mb-3 flex items-center",
+              collapsed ? "justify-center" : "gap-3",
+            )}
+          >
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/10 font-body text-xs font-bold text-creme">
               A
             </span>
-            <div>
-              <p className="font-body text-sm font-semibold text-creme">
-                Austin
-              </p>
-              <p className="font-body text-xs text-creme/45">Admin preview</p>
-            </div>
+            {collapsed ? null : (
+              <div>
+                <p className="font-body text-sm font-semibold text-creme">
+                  Austin
+                </p>
+                <p className="font-body text-xs text-creme/45">Admin preview</p>
+              </div>
+            )}
           </div>
           <form action={signOut}>
             <button
               type="submit"
-              className="w-full rounded-xl border border-white/12 bg-white/[0.03] px-3 py-2 font-body text-xs font-semibold text-creme/62 transition-colors hover:bg-white/10 hover:text-creme"
+              title={collapsed ? "Sign out" : undefined}
+              aria-label={collapsed ? "Sign out" : undefined}
+              className={cn(
+                "flex items-center whitespace-nowrap rounded-xl border border-white/12 bg-white/[0.03] font-body text-xs font-semibold text-creme/62 transition-colors hover:bg-white/10 hover:text-creme",
+                collapsed ? "mx-auto size-8 justify-center" : "w-full gap-2 px-3 py-2",
+              )}
             >
-              Sign out
+              {collapsed ? <AdminIcon name="signout" /> : "Sign out"}
             </button>
           </form>
         </div>
@@ -177,7 +298,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <div className="min-h-screen px-4 py-6 lg:ml-56 lg:px-8 lg:py-8">
+      <div
+        className={cn(
+          "min-h-screen px-4 py-6 transition-[margin] duration-300 ease-expo motion-reduce:transition-none lg:px-8 lg:py-8",
+          collapsed ? "lg:ml-[4.5rem]" : "lg:ml-56",
+        )}
+      >
         {children}
       </div>
     </main>

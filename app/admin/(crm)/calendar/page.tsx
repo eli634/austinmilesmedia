@@ -75,7 +75,7 @@ export default async function AdminCalendarPage() {
     <>
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h1 className="font-body text-3xl font-black tracking-[-0.045em] text-[#0b4a7a]">
+          <h1 className="font-body text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
             Calendar
           </h1>
           <p className="mt-1 font-body text-sm text-[#52677f]">
@@ -94,7 +94,7 @@ export default async function AdminCalendarPage() {
               <p className="font-body text-sm font-semibold text-[#7b8da3]">
                 Schedule
               </p>
-              <h2 className="mt-1 font-body text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
+              <h2 className="mt-1 font-body text-xl font-black tracking-[-0.03em] text-[#0b4a7a]">
                 {monthLabel}
               </h2>
             </div>

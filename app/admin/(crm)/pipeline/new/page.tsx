@@ -35,7 +35,7 @@ export default async function NewDealPage({
         >
           ← Back to pipeline
         </Link>
-        <h1 className="mt-4 font-display text-4xl font-black tracking-[-0.055em] text-[#0b4a7a]">
+        <h1 className="mt-4 font-display text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
           Add deal
         </h1>
         <p className="mt-2 font-body text-sm font-medium text-[#52677f]">
@@ -48,10 +48,7 @@ export default async function NewDealPage({
         <input type="hidden" name="contactId" value={contact?.id ?? ""} />
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6">
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              Kanban details
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
               Deal
             </h2>
           </div>
@@ -126,10 +123,7 @@ export default async function NewDealPage({
 
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6">
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              Synced contact
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
               Contact
             </h2>
           </div>

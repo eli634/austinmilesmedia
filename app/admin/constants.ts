@@ -20,6 +20,9 @@ export const dealStatuses: Array<{ value: DealStatus; label: string }> = [
   { value: "lost", label: "Lost" },
 ];
 
+export const ADMIN_SIDEBAR_COOKIE = "amm-admin-sidebar";
+export const ADMIN_SIDEBAR_COLLAPSED_VALUE = "collapsed";
+
 export const bookingStatuses: Array<{ value: BookingStatus; label: string }> = [
   { value: "scheduled", label: "Scheduled" },
   { value: "completed", label: "Completed" },

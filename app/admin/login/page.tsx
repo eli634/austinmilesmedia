@@ -39,11 +39,11 @@ export default async function AdminLoginPage({
           method="post"
           className="rounded-3xl border border-[#dbe6f1] bg-white p-7 shadow-sm"
         >
-          <p className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-[#7b8da3]">
-            Admin
-          </p>
-          <p className="max-w-[62ch] font-body font-medium leading-relaxed text-[#52677f] text-sm">
-            Sign in to view inquiries, manage deals, and track bookings.
+          <h1 className="font-display text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
+            Sign in
+          </h1>
+          <p className="mt-2 max-w-[62ch] font-body text-sm font-medium leading-relaxed text-[#52677f]">
+            View inquiries, manage deals, and track bookings.
           </p>
 
           <div className="mt-8 grid gap-4">
@@ -91,7 +91,7 @@ export default async function AdminLoginPage({
                 disabled.
               </p>
               {envDiagnostics.missing.length > 0 && (
-                <p className="font-mono text-[0.62rem] leading-relaxed text-[#7b8da3]">
+                <p className="font-body text-xs leading-relaxed text-[#7b8da3]">
                   Missing on server ({envDiagnostics.runtime}):{" "}
                   {envDiagnostics.missing.join(", ")}
                 </p>

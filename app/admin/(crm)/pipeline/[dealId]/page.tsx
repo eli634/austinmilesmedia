@@ -60,7 +60,7 @@ export default async function DealDetailPage({
           >
             ← Back to pipeline
           </Link>
-          <h1 className="mt-4 font-display text-4xl font-black tracking-[-0.055em] text-[#0b4a7a]">
+          <h1 className="mt-4 font-display text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
             {deal.title}
           </h1>
           <p className="mt-2 font-body text-sm font-medium text-[#52677f]">
@@ -71,7 +71,7 @@ export default async function DealDetailPage({
           <p className="font-body text-xs font-semibold uppercase tracking-[0.16em] text-[#7b8da3]">
             Deal value
           </p>
-          <p className="mt-1 font-display text-3xl font-black tracking-[-0.055em] text-[#0b4a7a]">
+          <p className="mt-1 font-display text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
             {formatMoney(deal.value)}
           </p>
         </div>
@@ -83,10 +83,7 @@ export default async function DealDetailPage({
 
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6">
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              Kanban details
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
               Deal
             </h2>
           </div>
@@ -154,10 +151,7 @@ export default async function DealDetailPage({
 
         <section className="rounded-[2rem] border border-[#dbe6f1] bg-white p-6 shadow-sm">
           <div className="mb-6">
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              Synced contact
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-extrabold tracking-[-0.04em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0b4a7a]">
               Contact
             </h2>
           </div>

@@ -81,7 +81,7 @@ export default async function AdminContactsPage({
       >
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="font-body text-3xl font-black tracking-[-0.045em] text-[#0b4a7a]">
+            <h1 className="font-body text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
               Contacts
             </h1>
             <p className="mt-1 font-body text-sm text-[#52677f]">
@@ -216,10 +216,7 @@ function ContactModal({
 
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.2em] text-[#7b8da3]">
-              CRM contact
-            </p>
-            <h2 className="mt-2 font-display text-3xl font-black tracking-[-0.055em] text-[#0b4a7a]">
+            <h2 className="font-display text-xl font-black tracking-[-0.03em] text-[#0b4a7a]">
               {contact ? contact.business || contact.name : "Add contact"}
             </h2>
             {contact && (
