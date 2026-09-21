@@ -140,8 +140,8 @@ export function Hero() {
                 shouldReduceMotion={shouldReduceMotion}
               />
               <MotionButton
-                href="#work"
-                label="See work like yours"
+                href="#process"
+                label="Our process"
                 shouldReduceMotion={shouldReduceMotion}
               />
             </motion.div>

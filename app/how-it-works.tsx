@@ -190,26 +190,33 @@ const arrowLabels = ["We film", "We cut", "We post"];
 const features = [
   {
     title: "We film the videos",
-    body: "You don\u2019t hire a camera guy, learn an editor, or manage a freelancer. Our crew films your videos and handles the edit, and the same people show up every time \u2014 by the third shoot they\u2019re not learning your business, they\u2019re just shooting it.",
+    body: [
+      "You don\u2019t hire a camera guy, learn an editor, or manage a freelancer. Our crew films your videos and handles the edit, and the same people show up every time \u2014 by the third shoot they\u2019re not learning your business, they\u2019re just shooting it.",
+    ],
   },
   {
-    title: "Direct access, real management",
-    body: "You get a dedicated account manager who knows your business and a direct line to the team making your content. Questions get answered, requests get handled, and Austin signs off before anything ships.",
+    title: "Direct access. Real management.",
+    body: [
+      "You get a dedicated account manager who knows your business, understands your goals, and keeps the entire operation moving.",
+      "You also get a direct line to the team creating your content, so questions get answered quickly, requests get handled, and changes are made without unnecessary back-and-forth.",
+    ],
   },
   {
     title: "Content that compounds",
-    body: "Every shoot feeds a library of consistent, high-quality content built around the work you want more of. We\u2019re not chasing views for their own sake \u2014 we\u2019re building a feed that sells your business every day it\u2019s posted.",
+    body: [
+      "Every shoot feeds a library of consistent, high-quality content built around the work you want more of. We\u2019re not chasing views for their own sake \u2014 we\u2019re building a feed that sells your business every day it\u2019s posted.",
+    ],
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section className="relative z-10 bg-creme text-[#08294a]">
+    <section
+      id="process"
+      className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
+    >
       <div className="mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36">
       <div className="mb-14 text-center">
-        <p className="mb-6 font-[family-name:var(--font-goliath-mono)] text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
-          The model
-        </p>
         <h2 className="mx-auto max-w-[18ch] font-[family-name:var(--font-goliath-sans)] text-[clamp(2.25rem,5vw,4.5rem)] font-extrabold leading-[0.95] tracking-[-0.055em] text-[#08294a]">
           How it actually works.
         </h2>
@@ -261,9 +268,16 @@ export function HowItWorks() {
             <h3 className="font-[family-name:var(--font-goliath-sans)] text-xl font-extrabold lowercase tracking-[-0.04em] text-[#08294a]">
               {feature.title.toLowerCase()}
             </h3>
-            <p className="mt-3 max-w-62 font-[family-name:var(--font-goliath-sans)] text-[0.95rem] font-medium leading-relaxed text-[#52677f]">
-              {feature.body}
-            </p>
+            <div className="mt-3 space-y-3">
+              {feature.body.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="font-[family-name:var(--font-goliath-sans)] text-[0.95rem] font-medium leading-relaxed text-[#52677f]"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </article>
         ))}
       </div>

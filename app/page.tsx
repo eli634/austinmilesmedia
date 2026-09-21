@@ -8,28 +8,94 @@ import { HowItWorks } from "./how-it-works";
 import { Nav } from "./nav";
 
 const leadBenefitBody =
-  "Full social media management from one lean, efficient team. We plan it, film it, edit it, and post it \u2014 no brief to write, no freelancer to babysit. The content isn\u2019t the point. It\u2019s the engine that builds your name and gets bigger deals done, without any of it landing on your desk.";
+  "Full social media management from one lean, efficient team. We plan it, film it, edit it, and post it.";
+
+const mission =
+  "We create and run the content systems that keep brands visible, consistent, and growing\u2014so business owners can focus on what they do best.";
+
+const vision =
+  "To redefine what a content partner looks like by becoming the team brands trust to own their entire content operation, from strategy to execution.";
+
+const servicesIntro =
+  "Whether you need a reliable production team or want your entire content operation taken off your plate, choose the level of support that fits your business.";
 
 const services = [
   {
     index: "01",
-    title: "Content",
-    body: "We come to you, shoot on site, and hand off finished, ready-to-post video. You run distribution. Same crew every time, and you stay in control.",
+    title: "Starter",
+    tagline: "Content production, handled.",
+    audience:
+      "For brands building a consistent presence while managing distribution internally.",
+    body: [
+      "We come to you, shoot on-site, edit everything, and deliver polished, ready-to-post content built around your brand.",
+      "You stay in control of posting. We make sure you consistently have high-quality content ready to go.",
+      "Because you work with the same team, we get to know your business, your voice, and how you show up best on camera.",
+    ],
+    includes: [
+      "Custom monthly content calendar",
+      "On-site photo + video production",
+      "Professional editing",
+      "Platform-ready content",
+      "Monthly check-in meeting",
+      "Organized content delivery",
+    ],
+    bestFor:
+      "Brands that already have someone handling social media but need a dependable creative team producing consistent, professional content.",
   },
   {
     index: "02",
-    title: "Content + management",
-    body: "We film, we edit, and we run your social media: posting, formats, cadence, all handled. You approve, we ship. Everything runs without you touching it.",
+    title: "Growth",
+    tagline: "Content creation + social media management.",
+    audience:
+      "For brands actively growing their audience and ready to take the day-to-day work off their plate.",
+    body: [
+      "Everything in Starter, plus we manage the distribution for you.",
+      "We create the content, write the captions, format each piece for the right platform, schedule it, publish it, and manage your overall content calendar.",
+      "Your role stays simple: you approve it, we run it.",
+      "We also help keep your brand active beyond posting through community management, engagement, and audience replies.",
+    ],
+    includes: [
+      "Everything in Starter",
+      "Social media management",
+      "Custom graphic content",
+      "Captions + copywriting",
+      "Multi-platform management",
+      "Scheduling + publishing",
+      "Community management + replies",
+      "Content calendar management",
+      "Ongoing content optimization",
+    ],
+    bestFor:
+      "Brands that want a professional, consistent social presence without managing the process internally.",
   },
   {
     index: "03",
-    title: "Full white-glove",
-    body: "The whole operation, off your plate. Strategy, filming, editing, posting, and reporting, run by one efficient team and signed off by Austin before anything goes live. You get a brand that never goes quiet and a portal that shows exactly what\u2019s working.",
-    flagship: true,
+    title: "Pro",
+    tagline: "Your full content and social operation.",
+    audience:
+      "For brands ready to scale organic content, paid media, and strategy under one team.",
+    body: [
+      "Everything in Growth, plus a higher level of strategy, creative oversight, and execution.",
+      "We plan your content campaigns, create the content, manage your platforms, oversee distribution, support paid advertising, and use performance insights to guide what comes next.",
+      "Rather than simply posting content, we help shape the strategy behind it\u2014what to create, where to distribute it, and what to double down on.",
+      "You also receive priority turnaround and regular strategy sessions, giving you a clear view of what\u2019s being created, what\u2019s working, and where the brand should go next.",
+    ],
+    includes: [
+      "Everything in Growth",
+      "Full content strategy",
+      "Campaign planning",
+      "Paid ad management",
+      "Expanded platform management",
+      "Priority turnaround",
+      "Monthly strategy session",
+      "Ongoing strategic optimization",
+    ],
+    bestFor:
+      "Brands that want one team responsible for the strategy, production, management, and growth of their entire social presence.",
   },
 ];
 
-const reels = ["Roofing", "HVAC", "Custom builders", "Sports"];
+const servicesClose = "You run the business. We run the content.";
 
 const founderQuote =
   "\u201CNothing ships that I wouldn\u2019t put my own name on.\u201D";
@@ -64,7 +130,7 @@ const objections = [
 ];
 
 const ctaOffer =
-  "Book a call and we\u2019ll walk you through exactly how we\u2019d help. No cost, no pitch deck.";
+  "Book a call and we\u2019ll walk you through exactly how we can help, what the process looks like, and what would make sense for your brand.";
 
 export default function Home() {
   return (
@@ -75,18 +141,25 @@ export default function Home() {
       <CustomerMarquee />
 
       {/* LEAD BENEFIT */}
-      <section className="relative z-10 mx-auto grid w-full max-w-[1320px] gap-10 px-5 py-28 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:px-10 lg:py-36">
+      <section className="relative z-10 mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
-            <p className="eyebrow mb-6">
-              The operation
-            </p>
-            <h2 className="h2 max-w-[18ch]">
-              We run your social media.
-            </h2>
+            <p className="eyebrow mb-6">The operation</p>
+            <h2 className="h2 max-w-[18ch]">We run your social media.</h2>
           </div>
-          <p className="body text-lg lg:pb-2">
-            {leadBenefitBody}
-          </p>
+          <p className="body text-lg lg:pb-2">{leadBenefitBody}</p>
+        </div>
+
+        <div className="mt-16 grid gap-10 border-t border-creme/10 pt-14 sm:grid-cols-2 sm:gap-12 lg:mt-20 lg:gap-16">
+          <div>
+            <p className="eyebrow mb-4">Mission</p>
+            <p className="body text-lg">{mission}</p>
+          </div>
+          <div>
+            <p className="eyebrow mb-4">Vision</p>
+            <p className="body text-lg">{vision}</p>
+          </div>
+        </div>
       </section>
 
       {/* HOW IT WORKS */}
@@ -98,8 +171,8 @@ export default function Home() {
         className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
       >
         <div className="mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36">
-          <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
+          <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+            <div className="max-w-[28rem]">
               <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
                 How we work together
               </p>
@@ -107,37 +180,76 @@ export default function Home() {
                 Three ways to run your content.
               </h2>
             </div>
+            <p className="max-w-[38rem] font-body text-base font-medium leading-relaxed text-[#52677f] lg:pb-1 lg:text-[1.05rem]">
+              {servicesIntro}
+            </p>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
             {services.map((service) => (
               <article
                 key={service.title}
-                className="hover-glow group overflow-hidden rounded-3xl border border-[#d8e3ef] bg-white p-7 shadow-[0_18px_55px_rgba(3,16,36,0.07)]"
+                className="hover-glow group flex flex-col overflow-hidden rounded-3xl border border-[#d8e3ef] bg-white p-7 shadow-[0_18px_55px_rgba(3,16,36,0.07)] sm:p-8"
               >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-sm font-bold text-[#0f5d73]">
-                      {service.index}
-                    </span>
-                    {service.flagship && (
-                      <span className="font-mono text-[0.64rem] uppercase tracking-[0.22em] text-[#607086]">
-                        Flagship
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="mt-7 font-display text-3xl font-extrabold leading-none tracking-[-0.05em] text-[#08294a]">
-                    {service.title}
-                  </h3>
-                  <p className="mt-4 font-body text-[0.95rem] font-medium leading-relaxed text-[#52677f]">
-                    {service.body}
-                  </p>
+                <div className="flex items-center justify-between">
+                  <span className="font-display text-sm font-bold text-[#0f5d73]">
+                    {service.index}
+                  </span>
                 </div>
+
+                <h3 className="mt-7 font-display text-3xl font-extrabold leading-none tracking-[-0.05em] text-[#08294a]">
+                  {service.title}
+                </h3>
+                <p className="mt-3 font-display text-lg font-bold leading-snug tracking-[-0.03em] text-[#0f5d73]">
+                  {service.tagline}
+                </p>
+                <p className="mt-4 font-body text-[0.9rem] font-semibold leading-relaxed text-[#08294a]/70">
+                  {service.audience}
+                </p>
+
+                <div className="mt-5 space-y-3">
+                  {service.body.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="font-body text-[0.92rem] font-medium leading-relaxed text-[#52677f]"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+
+                <div className="mt-8 border-t border-[#d8e3ef] pt-6">
+                  <p className="font-mono text-[0.64rem] uppercase tracking-[0.22em] text-[#607086]">
+                    Includes
+                  </p>
+                  <ul className="mt-4 space-y-2.5">
+                    {service.includes.map((item) => (
+                      <li
+                        key={item}
+                        className="flex gap-2.5 font-body text-[0.88rem] font-medium leading-snug text-[#31475f]"
+                      >
+                        <span
+                          aria-hidden
+                          className="mt-[0.45em] size-1.5 shrink-0 rounded-full bg-[#0f5d73]"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="mt-auto border-t border-[#d8e3ef] pt-6 font-body text-[0.88rem] font-medium leading-relaxed text-[#52677f]">
+                  <span className="font-semibold text-[#08294a]">Best for: </span>
+                  {service.bestFor}
+                </p>
               </article>
             ))}
           </div>
-          <div className="mt-10 flex justify-center">
+
+          <div className="mt-14 flex flex-col items-center gap-6 text-center">
+            <p className="font-display text-2xl font-extrabold tracking-[-0.04em] text-[#08294a] sm:text-3xl">
+              {servicesClose}
+            </p>
             <Button
               asChild
               size="lg"
@@ -146,50 +258,6 @@ export default function Home() {
             >
               <Link href="/get-started">Get started</Link>
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* WORK / REELS */}
-      <section
-        id="work"
-        className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
-      >
-        <div className="mx-auto w-full max-w-[1320px] px-5 pb-28 sm:px-8 lg:px-10 lg:pb-36">
-          <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
-                The work
-              </p>
-              <h2 className="h2 max-w-[14ch] text-[#08294a]">
-                See our work.
-              </h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {reels.map((label) => (
-              <div
-                key={label}
-                className="group overflow-hidden rounded-3xl border border-[#d8e3ef] bg-white p-3 shadow-[0_18px_55px_rgba(3,16,36,0.07)] transition-transform duration-300 ease-expo hover:-translate-y-1"
-              >
-                <div className="relative aspect-[9/16] overflow-hidden rounded-[1.25rem] border border-white/10 bg-gradient-to-b from-[#06111f] via-[#0a2842] to-[#0f5d73]">
-                  <Image
-                    src="/amm-signature-white-transparent.png"
-                    alt=""
-                    aria-hidden
-                    width={400}
-                    height={200}
-                    className="pointer-events-none absolute left-1/2 top-1/2 w-3/4 -translate-x-1/2 -translate-y-1/2 opacity-[0.08] transition-opacity duration-300 group-hover:opacity-[0.13]"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="flex size-12 items-center justify-center rounded-full border border-white/30 bg-ink/40 text-white backdrop-blur-sm transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-ink">
-                      ▶
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -239,9 +307,8 @@ export default function Home() {
         className="relative z-10 mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36"
       >
         <div className="mb-14">
-          <p className="eyebrow mb-6">Straight answers</p>
           <h2 className="h2 max-w-[18ch]">
-            The questions you&apos;re actually asking.
+            The questions you&apos;re already asking.
           </h2>
         </div>
 
@@ -272,17 +339,13 @@ export default function Home() {
           className="pointer-events-none absolute left-1/2 top-0 h-[40rem] w-[60rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-[radial-gradient(closest-side,rgba(248,251,255,0.06),transparent)]"
         />
         <div className="relative mx-auto w-full max-w-[1320px] px-5 py-28 text-center sm:px-8 lg:px-10 lg:py-40">
-          <p className="eyebrow mb-8">See it before you pay</p>
-          <h2 className="display mx-auto max-w-[16ch]">
-            See if this works, on us.
+          <h2 className="display mx-auto max-w-[18ch] !text-[clamp(2.35rem,5vw,4.5rem)]">
+            Talk with a creative representative.
           </h2>
           <p className="body mx-auto mt-8 text-lg">{ctaOffer}</p>
-          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+          <div className="mt-10 flex justify-center">
             <Button asChild size="lg">
               <Link href="/get-started">Get started</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="#missing-booking-link">Book a call</Link>
             </Button>
           </div>
         </div>

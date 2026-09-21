@@ -99,12 +99,12 @@ button:not(:disabled),
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-weight: 600;
   font-style: normal;
   text-transform: uppercase;
-  letter-spacing: 0.24em;
-  font-size: clamp(0.64rem, 0.85vw, 0.72rem);
+  letter-spacing: 0.18em;
+  font-size: clamp(0.68rem, 0.9vw, 0.75rem);
   color: var(--color-muted);
 }
 
