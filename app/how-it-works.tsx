@@ -215,7 +215,7 @@ export function HowItWorks() {
       id="process"
       className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
     >
-      <div className="mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36">
+      <div className="mx-auto w-full max-w-[1320px] px-5 pb-10 pt-28 sm:px-8 lg:px-10 lg:pb-12 lg:pt-36">
       <div className="mb-14 text-center">
         <h2 className="mx-auto max-w-[18ch] font-[family-name:var(--font-goliath-sans)] text-[clamp(2.25rem,5vw,4.5rem)] font-extrabold leading-[0.95] tracking-[-0.055em] text-[#08294a]">
           How it actually works.

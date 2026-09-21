@@ -170,7 +170,7 @@ export default function Home() {
         id="services"
         className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
       >
-        <div className="mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36">
+        <div className="mx-auto w-full max-w-[1320px] px-5 pb-28 pt-10 sm:px-8 lg:px-10 lg:pb-36 lg:pt-12">
           <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
             <div className="max-w-[28rem]">
               <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
