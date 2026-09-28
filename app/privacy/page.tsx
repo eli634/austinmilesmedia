@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Privacy Notice",
-  description: "Privacy notice for Austin Miles Media.",
+  description: "Privacy notice for AMM (Attention Means Money).",
 };
 
 export default function PrivacyPage() {
@@ -76,10 +76,10 @@ export default function PrivacyPage() {
               To request access, correction, or deletion of your information,
               contact us at{" "}
               <a
-                href="mailto:austin@austinmilesmedia.com"
+                href="mailto:info@attentionmeans-money.com"
                 className="font-semibold text-creme underline"
               >
-                austin@austinmilesmedia.com
+                info@attentionmeans-money.com
               </a>
               .
             </p>

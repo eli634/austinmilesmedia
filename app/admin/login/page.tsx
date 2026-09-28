@@ -21,12 +21,12 @@ export default async function AdminLoginPage({
       <div className="w-full max-w-md">
         <Link
           href="/"
-          aria-label="Austin Miles Media home"
+          aria-label="AMM home"
           className="relative mx-auto mb-10 block h-10 w-36"
         >
           <Image
             src="/amm-signature-white-transparent.png"
-            alt="Austin Miles Media"
+            alt="AMM"
             fill
             priority
             sizes="144px"

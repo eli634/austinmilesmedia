@@ -248,12 +248,12 @@ export default function GetStarted() {
       <header className="mx-auto flex w-full max-w-[760px] items-center justify-between px-5 py-6 sm:px-8">
         <Link
           href="/"
-          aria-label="Austin Miles Media home"
+          aria-label="AMM home"
           className="relative h-8 w-28 transition-opacity hover:opacity-80"
         >
           <Image
             src="/amm-signature-grey.png"
-            alt="Austin Miles Media"
+            alt="AMM"
             fill
             priority
             sizes="112px"

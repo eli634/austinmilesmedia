@@ -89,12 +89,12 @@ export function Nav() {
         <nav className="flex items-center justify-between gap-3">
           <Link
             href="/"
-            aria-label="Austin Miles Media home"
+            aria-label="AMM home"
             className="relative h-8 w-28 shrink-0 transition-opacity hover:opacity-80 sm:h-9 sm:w-32"
           >
             <Image
               src="/amm-signature-white-transparent.png"
-              alt="Austin Miles Media"
+              alt="AMM"
               fill
               priority
               className="object-contain object-left"

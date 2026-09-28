@@ -119,7 +119,7 @@ export function Hero() {
         <div className="relative z-10 mx-auto grid w-full max-w-[1320px] gap-12 px-5 py-28 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-10 lg:py-36">
           <div>
             <motion.p {...rise(0)} className="eyebrow mb-6">
-              Austin Miles Media
+              AMM · Attention Means Money
             </motion.p>
             <motion.h1 {...rise(0)} className="display max-w-[12ch]">
               <span className="text-creme">Become the obvious choice.</span>

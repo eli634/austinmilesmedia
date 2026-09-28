@@ -11,29 +11,29 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Austin Miles Media",
-    template: "%s | Austin Miles Media",
+    default: "AMM | Attention Means Money",
+    template: "%s | AMM",
   },
   description:
     "In-house video for roofing, HVAC, and custom builders who want more booked jobs from content they never have to film.",
   openGraph: {
-    title: "Austin Miles Media",
+    title: "AMM | Attention Means Money",
     description:
       "In-house video for roofing, HVAC, and custom builders who want more booked jobs from content they never have to film.",
-    siteName: "Austin Miles Media",
+    siteName: "AMM",
     type: "website",
     images: [
       {
         url: "/og-image-amm.png",
         width: 1200,
         height: 630,
-        alt: "Austin Miles Media preview card.",
+        alt: "AMM, Attention Means Money, preview card.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Austin Miles Media",
+    title: "AMM | Attention Means Money",
     description:
       "In-house video for roofing, HVAC, and custom builders who want more booked jobs from content they never have to film.",
     images: ["/og-image-amm.png"],

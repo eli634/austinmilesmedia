@@ -186,9 +186,9 @@ export async function POST(request: Request) {
   }
 
   // Pluggable notification: fires only when email delivery is configured.
-  // Flag these as deploy tokens: RESEND_API_KEY, AUSTIN_NOTIFY_EMAIL, INQUIRY_FROM_EMAIL.
+  // Flag these as deploy tokens: RESEND_API_KEY, LEAD_NOTIFY_EMAIL, INQUIRY_FROM_EMAIL.
   const apiKey = process.env.RESEND_API_KEY;
-  const notifyTo = process.env.AUSTIN_NOTIFY_EMAIL;
+  const notifyTo = process.env.LEAD_NOTIFY_EMAIL;
   const notifyFrom = process.env.INQUIRY_FROM_EMAIL;
 
   if (apiKey && notifyTo && notifyFrom) {

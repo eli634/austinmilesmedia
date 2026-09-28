@@ -157,12 +157,12 @@ export function AdminShell({
           {collapsed ? null : (
             <Link
               href="/admin"
-              aria-label="Austin Miles Media admin"
+              aria-label="AMM admin"
               className="relative h-10 w-32"
             >
               <Image
                 src="/amm-signature-white-transparent.png"
-                alt="Austin Miles Media"
+                alt="AMM"
                 fill
                 priority
                 sizes="128px"
@@ -276,7 +276,7 @@ export function AdminShell({
           <Link href="/admin" className="relative h-8 w-28">
             <Image
               src="/amm-signature-dark.png"
-              alt="Austin Miles Media"
+              alt="AMM"
               fill
               priority
               sizes="112px"

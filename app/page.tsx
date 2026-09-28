@@ -357,7 +357,7 @@ export default function Home() {
           <div className="relative h-20 w-64 sm:h-24 sm:w-80">
             <Image
               src="/amm-signature-white-transparent.png"
-              alt="Austin Miles Media"
+              alt="AMM"
               fill
               sizes="(min-width: 640px) 320px, 256px"
               className="object-contain object-left"
@@ -367,14 +367,14 @@ export default function Home() {
           <div className="mt-16 flex flex-col gap-6 border-t border-creme/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap gap-x-8 gap-y-2">
               <Link
-                href="#missing-contact-email"
+                href="mailto:info@attentionmeans-money.com"
                 className="font-body text-sm text-creme/60 transition-colors hover:text-creme"
               >
-                hello@austinmilesmedia.com
+                info@attentionmeans-money.com
               </Link>
             </div>
             <p className="font-body text-sm text-creme/40">
-              © {new Date().getFullYear()} Austin Miles Media
+              © {new Date().getFullYear()} AMM · Attention Means Money
             </p>
           </div>
         </div>
