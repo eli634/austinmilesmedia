@@ -367,10 +367,10 @@ export default function Home() {
           <div className="mt-16 flex flex-col gap-6 border-t border-creme/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap gap-x-8 gap-y-2">
               <Link
-                href="mailto:info@attentionmeans-money.com"
+                href="mailto:info@attentionmeansmoney.com"
                 className="font-body text-sm text-creme/60 transition-colors hover:text-creme"
               >
-                info@attentionmeans-money.com
+                info@attentionmeansmoney.com
               </Link>
             </div>
             <p className="font-body text-sm text-creme/40">

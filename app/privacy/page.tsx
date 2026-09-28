@@ -76,10 +76,10 @@ export default function PrivacyPage() {
               To request access, correction, or deletion of your information,
               contact us at{" "}
               <a
-                href="mailto:info@attentionmeans-money.com"
+                href="mailto:info@attentionmeansmoney.com"
                 className="font-semibold text-creme underline"
               >
-                info@attentionmeans-money.com
+                info@attentionmeansmoney.com
               </a>
               .
             </p>
