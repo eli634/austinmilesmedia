@@ -16,9 +16,6 @@ const mission =
 const vision =
   "To redefine what a content partner looks like by becoming the team brands trust to own their entire content operation, from strategy to execution.";
 
-const servicesIntro =
-  "Whether you need a reliable production team or want your entire content operation taken off your plate, choose the level of support that fits your business.";
-
 const services = [
   {
     index: "01",
@@ -108,12 +105,8 @@ const founderBody = [
 
 const objections = [
   {
-    q: "Is this worth what it costs?",
-    a: "We run a lean, efficient team \u2014 no agency layers, no bloated production days, no overhead you\u2019re quietly paying for. You get the output of a full content and social media operation for a fraction of what staffing it yourself would cost, and every dollar goes to people actually doing the work.",
-  },
-  {
     q: "I don\u2019t want to be locked into a retainer.",
-    a: "The retainer buys you volume and a standing crew, not a cage. We run 3, 6, and 12-month terms, and you watch the work stack up in your portal the whole way. If it isn\u2019t working, you\u2019ll see it there before you feel it.",
+    a: "The retainer buys you volume and a standing crew, not a cage. We run 6 and 12-month terms, and you watch the work stack up in your portal the whole way. If it isn\u2019t working, you\u2019ll see it there before you feel it.",
   },
   {
     q: "I hate being on camera.",
@@ -171,18 +164,13 @@ export default function Home() {
         className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
       >
         <div className="mx-auto w-full max-w-[1320px] px-5 pb-28 pt-10 sm:px-8 lg:px-10 lg:pb-36 lg:pt-12">
-          <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
-            <div className="max-w-[28rem]">
-              <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
-                How we work together
-              </p>
-              <h2 className="h2 max-w-[24ch] text-[#08294a]">
-                Three ways to run your content.
-              </h2>
-            </div>
-            <p className="max-w-[38rem] font-body text-base font-medium leading-relaxed text-[#52677f] lg:pb-1 lg:text-[1.05rem]">
-              {servicesIntro}
+          <div className="mb-14 text-center">
+            <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
+              How we work together
             </p>
+            <h2 className="h2 text-[#08294a]">
+              Three ways to run your content.
+            </h2>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">

@@ -61,6 +61,18 @@ export const customers: Customer[] = [
     logoOnly: true,
   },
   { name: "Treasure Island Outfitters" },
+  {
+    name: "RAW Nutrition",
+    logo: "/customer-logos/raw-nutrition.svg",
+    logoClass: "h-6 w-auto max-w-[7rem]",
+    logoOnly: true,
+  },
+  {
+    name: "BUM Energy",
+    logo: "/customer-logos/bum-energy.png",
+    logoClass: "h-9 w-auto max-w-[6rem]",
+    logoOnly: true,
+  },
 ];
 
 const logoClassName =
@@ -69,8 +81,9 @@ const logoClassName =
 export function CustomerMarquee() {
   return (
     <section
+      id="trusted"
       aria-label="Trusted operators"
-      className="relative z-10 pb-8 pt-2 lg:pb-10 lg:pt-2"
+      className="relative z-10 scroll-mt-24 pb-8 pt-2 lg:pb-10 lg:pt-2"
     >
       <p className="mx-auto mb-6 max-w-[28ch] px-5 text-center font-body text-xl font-medium leading-tight tracking-[-0.04em] text-creme/70 sm:max-w-none sm:text-2xl lg:mb-7 lg:text-3xl">
         Trusted by{" "}
@@ -91,6 +104,7 @@ export function CustomerMarquee() {
                   aria-hidden
                   width={160}
                   height={48}
+                  unoptimized={customer.logo.endsWith(".svg")}
                   className={cn(
                     logoClassName,
                     customer.logoClass ?? "h-9 w-auto max-w-[7rem]",

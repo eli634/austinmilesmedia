@@ -6,6 +6,9 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 
+// Hidden until the hero video is ready; flip to true to restore the section.
+const SHOW_HERO_COPY = false;
+
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -74,7 +77,7 @@ export function Hero() {
         </div>
         <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center px-5">
           <motion.a
-            href="#hero-copy"
+            href={SHOW_HERO_COPY ? "#hero-copy" : "#trusted"}
             {...rise(0.12)}
             className="rounded-full border border-white/18 bg-ink/30 px-4 py-2 font-mono text-[0.64rem] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md transition-colors hover:border-white/35 hover:text-white"
           >
@@ -102,6 +105,7 @@ export function Hero() {
         </Link>
       </section>
 
+      {SHOW_HERO_COPY && (
       <section
         id="hero-copy"
         className="relative flex min-h-[88vh] flex-col justify-center overflow-hidden scroll-mt-20"
@@ -156,6 +160,7 @@ export function Hero() {
           <div className="divider" />
         </div>
       </section>
+      )}
     </>
   );
 }

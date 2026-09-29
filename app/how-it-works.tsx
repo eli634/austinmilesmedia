@@ -164,22 +164,22 @@ function CameraVisual() {
 
 const stages = [
   {
-    title: "On-site shoot",
+    title: "On-Site Shoot",
     sub: "On-site at your location.",
     visual: <CameraVisual />,
   },
   {
-    title: "Short-form clips",
+    title: "Short-Form Clips",
     sub: "Fresh content, filmed consistently.",
     visual: <ClipGrid />,
   },
   {
-    title: "Your channels",
+    title: "Your Channels",
     sub: "Posted where your customers actually scroll.",
     visual: <ChannelsNode />,
   },
   {
-    title: "Steady output",
+    title: "Steady Output",
     sub: "Consistent, high-quality content every month.",
     visual: <CadenceBars />,
   },
@@ -189,20 +189,20 @@ const arrowLabels = ["We film", "We cut", "We post"];
 
 const features = [
   {
-    title: "We film the videos",
+    title: "We Film the Videos",
     body: [
       "You don\u2019t hire a camera guy, learn an editor, or manage a freelancer. Our crew films your videos and handles the edit, and the same people show up every time \u2014 by the third shoot they\u2019re not learning your business, they\u2019re just shooting it.",
     ],
   },
   {
-    title: "Direct access. Real management.",
+    title: "Direct Access. Real Management.",
     body: [
       "You get a dedicated account manager who knows your business, understands your goals, and keeps the entire operation moving.",
       "You also get a direct line to the team creating your content, so questions get answered quickly, requests get handled, and changes are made without unnecessary back-and-forth.",
     ],
   },
   {
-    title: "Content that compounds",
+    title: "Content That Compounds",
     body: [
       "Every shoot feeds a library of consistent, high-quality content built around the work you want more of. We\u2019re not chasing views for their own sake \u2014 we\u2019re building a feed that sells your business every day it\u2019s posted.",
     ],
@@ -235,8 +235,8 @@ export function HowItWorks() {
                   {stage.visual}
                 </div>
                 <div className="text-center">
-                  <p className="font-[family-name:var(--font-goliath-sans)] text-lg font-extrabold lowercase tracking-[-0.035em] text-[#08294a]">
-                    {stage.title.toLowerCase()}
+                  <p className="font-[family-name:var(--font-goliath-sans)] text-lg font-extrabold uppercase tracking-[0.01em] text-[#08294a]">
+                    {stage.title}
                   </p>
                   <p className="mt-1 font-[family-name:var(--font-goliath-sans)] text-xs font-medium leading-snug text-[#607086]">
                     {stage.sub}
@@ -265,8 +265,8 @@ export function HowItWorks() {
             key={feature.title}
             className="hover-glow rounded-3xl border border-[#d8e3ef] bg-white p-7 shadow-[0_18px_55px_rgba(3,16,36,0.07)]"
           >
-            <h3 className="font-[family-name:var(--font-goliath-sans)] text-xl font-extrabold lowercase tracking-[-0.04em] text-[#08294a]">
-              {feature.title.toLowerCase()}
+            <h3 className="font-[family-name:var(--font-goliath-sans)] text-xl font-extrabold tracking-[-0.04em] text-[#08294a]">
+              {feature.title}
             </h3>
             <div className="mt-3 space-y-3">
               {feature.body.map((paragraph) => (
