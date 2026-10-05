@@ -257,15 +257,15 @@ export default function Home() {
       >
         <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-creme/10 bg-surface">
           <Image
-            src="/austin-founder.png"
-            alt="Austin Miles in the field with a cinema camera rig."
+            src="/austin-founder.jpg"
+            alt="Portrait of Austin Miles."
             fill
             sizes="(min-width: 1024px) 420px, 100vw"
-            className="object-cover"
+            className="object-cover object-[center_20%]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/45 via-transparent to-transparent" />
           <span className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-ink/35 px-3 py-1 font-body text-xs font-semibold text-white/80 backdrop-blur-md">
-            Austin on shoot
+            Austin Miles
           </span>
         </div>
 
