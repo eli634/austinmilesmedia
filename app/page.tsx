@@ -7,15 +7,6 @@ import { Hero } from "./hero";
 import { HowItWorks } from "./how-it-works";
 import { Nav } from "./nav";
 
-const leadBenefitBody =
-  "Full social media management from one lean, efficient team. We plan it, film it, edit it, and post it.";
-
-const mission =
-  "We create and run the content systems that keep brands visible, consistent, and growing\u2014so business owners can focus on what they do best.";
-
-const vision =
-  "To redefine what a content partner looks like by becoming the team brands trust to own their entire content operation, from strategy to execution.";
-
 const services = [
   {
     index: "01",
@@ -94,8 +85,7 @@ const services = [
 
 const servicesClose = "You run the business. We run the content.";
 
-const founderQuote =
-  "\u201CNothing ships that I wouldn\u2019t put my own name on.\u201D";
+const founderQuote = "\u201CWe want your business to win.\u201D";
 
 const founderBody = [
   "Austin has spent nine years behind a camera, across a wider range of industries than most agencies ever see: car dealerships, NASCAR drivers, professional businesses, real estate, and hunting lodges.",
@@ -133,28 +123,6 @@ export default function Home() {
 
       <CustomerMarquee />
 
-      {/* LEAD BENEFIT */}
-      <section className="relative z-10 mx-auto w-full max-w-[1320px] px-5 py-28 sm:px-8 lg:px-10 lg:py-36">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-          <div>
-            <p className="eyebrow mb-6">The operation</p>
-            <h2 className="h2 max-w-[18ch]">We run your social media.</h2>
-          </div>
-          <p className="body text-lg lg:pb-2">{leadBenefitBody}</p>
-        </div>
-
-        <div className="mt-16 grid gap-10 border-t border-creme/10 pt-14 sm:grid-cols-2 sm:gap-12 lg:mt-20 lg:gap-16">
-          <div>
-            <p className="eyebrow mb-4">Mission</p>
-            <p className="body text-lg">{mission}</p>
-          </div>
-          <div>
-            <p className="eyebrow mb-4">Vision</p>
-            <p className="body text-lg">{vision}</p>
-          </div>
-        </div>
-      </section>
-
       {/* HOW IT WORKS */}
       <HowItWorks />
 
@@ -163,7 +131,7 @@ export default function Home() {
         id="services"
         className="relative z-10 scroll-mt-24 bg-creme text-[#08294a]"
       >
-        <div className="mx-auto w-full max-w-[1320px] px-5 pb-28 pt-10 sm:px-8 lg:px-10 lg:pb-36 lg:pt-12">
+        <div className="mx-auto w-full max-w-[1320px] px-5 pb-12 pt-10 sm:px-8 lg:px-10 lg:pb-14 lg:pt-12">
           <div className="mb-14 text-center">
             <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#607086]">
               How we work together
