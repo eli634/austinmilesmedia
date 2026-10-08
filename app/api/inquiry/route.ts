@@ -181,6 +181,13 @@ export async function POST(request: Request) {
         { status: 500 },
       );
     }
+  } else if (process.env.NODE_ENV === "production") {
+    console.error("[AMM] Inquiry rejected: Supabase admin env missing.");
+
+    return NextResponse.json(
+      { ok: false, error: "Inquiry could not be saved." },
+      { status: 503 },
+    );
   } else {
     console.warn("[AMM] Supabase admin env missing; inquiry was only logged.");
   }
@@ -218,6 +225,12 @@ export async function POST(request: Request) {
     } catch (error) {
       console.error("[AMM] Notification error:", error);
     }
+  }
+
+  if (!(apiKey && notifyTo && notifyFrom) && process.env.NODE_ENV === "production") {
+    console.warn(
+      "[AMM] Inquiry saved without an email alert. Set RESEND_API_KEY, LEAD_NOTIFY_EMAIL, and INQUIRY_FROM_EMAIL.",
+    );
   }
 
   return NextResponse.json({ ok: true });

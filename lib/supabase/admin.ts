@@ -1,5 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 
+if (typeof window !== "undefined") {
+  throw new Error("Supabase admin client cannot run in the browser.");
+}
+
 import { getSupabaseUrl } from "./env";
 import type { Database } from "./types";
 

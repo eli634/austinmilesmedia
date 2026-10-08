@@ -2,337 +2,324 @@ import Link from "next/link";
 
 import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
-import type { Database } from "@/lib/supabase/types";
+import type { Database, InquiryStatus } from "@/lib/supabase/types";
 
-import {
-  createContact,
-  deleteContact,
-  updateContactDetails,
-} from "../../actions";
-import { dealStatuses } from "../../constants";
-import { demoContacts, demoDeals } from "../../demo-data";
+import { promoteInquiry, updateInquiryStatus } from "../../actions";
+import { inquiryStatuses } from "../../constants";
+import { demoDeals, demoInquiries } from "../../demo-data";
 
-type Contact = Database["public"]["Tables"]["contacts"]["Row"];
-type Deal = Database["public"]["Tables"]["deals"]["Row"];
+type Inquiry = Database["public"]["Tables"]["inquiries"]["Row"];
+
+const FILTERS = ["all", "new", "reviewed", "promoted", "archived"] as const;
+type InquiryFilter = (typeof FILTERS)[number];
+
+const PAGE_ERRORS = new Set(["Could not save this lead."]);
+
+const statusTone: Record<InquiryStatus, string> = {
+  new: "bg-[#eaf3ff] text-[#0b4a7a]",
+  reviewed: "bg-[#f4f7fb] text-[#52677f]",
+  promoted: "bg-[#eaf3ff] text-[#0b4a7a]",
+  archived: "bg-[#f4f7fb] text-[#7b8da3]",
+};
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", {
     month: "short",
     day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
   }).format(new Date(value));
 }
 
-export default async function AdminContactsPage({
+function isFilter(value: string | undefined): value is InquiryFilter {
+  return FILTERS.some((filter) => filter === value);
+}
+
+function statusLabel(status: InquiryStatus) {
+  return inquiryStatuses.find((item) => item.value === status)?.label ?? status;
+}
+
+export default async function AdminInquiriesPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ contact?: string }>;
+  searchParams?: Promise<{ inquiry?: string; filter?: string; error?: string }>;
 }) {
   const params = await searchParams;
+  const filter: InquiryFilter = isFilter(params?.filter) ? params.filter : "all";
+  const error = params?.error && PAGE_ERRORS.has(params.error) ? params.error : undefined;
   const demoMode = isAdminDemoMode();
   const supabase = demoMode ? null : await createClient();
 
-  let contacts: Contact[];
-  let deals: Deal[];
+  let inquiries: Inquiry[];
+  let dealsByInquiry = new Map<string, string>();
 
   if (demoMode) {
-    contacts = demoContacts;
-    deals = demoDeals;
+    inquiries = demoInquiries;
+    dealsByInquiry = new Map(
+      demoDeals
+        .filter((deal) => deal.inquiry_id)
+        .map((deal) => [deal.inquiry_id as string, deal.id]),
+    );
   } else {
-    const [contactsResult, dealsResult] = await Promise.all([
+    const [inquiriesResult, dealsResult] = await Promise.all([
       supabase!
-        .from("contacts")
+        .from("inquiries")
         .select("*")
-        .order("updated_at", { ascending: false }),
-      supabase!
-        .from("deals")
-        .select("*")
-        .order("updated_at", { ascending: false }),
+        .order("created_at", { ascending: false }),
+      supabase!.from("deals").select("id,inquiry_id").not("inquiry_id", "is", null),
     ]);
 
-    contacts = contactsResult.data ?? [];
-    deals = dealsResult.data ?? [];
+    inquiries = inquiriesResult.data ?? [];
+    dealsByInquiry = new Map(
+      (dealsResult.data ?? [])
+        .filter((deal) => deal.inquiry_id)
+        .map((deal) => [deal.inquiry_id as string, deal.id]),
+    );
   }
-  const selectedContact =
-    params?.contact && params.contact !== "new"
-      ? contacts.find((contact) => contact.id === params.contact) ?? null
-      : null;
-  const isAddingContact = params?.contact === "new";
-  const contactDeals = new Map<string, Deal[]>();
 
-  for (const deal of deals) {
-    if (!deal.contact_id) {
-      continue;
-    }
-
-    contactDeals.set(deal.contact_id, [
-      ...(contactDeals.get(deal.contact_id) ?? []),
-      deal,
-    ]);
-  }
+  const visible =
+    filter === "all" ? inquiries : inquiries.filter((inquiry) => inquiry.status === filter);
+  const newCount = inquiries.filter((inquiry) => inquiry.status === "new").length;
+  const selected =
+    inquiries.find((inquiry) => inquiry.id === params?.inquiry) ?? null;
+  const selectedDealId = selected ? dealsByInquiry.get(selected.id) : undefined;
 
   return (
     <>
-      <div
-        className={
-          selectedContact || isAddingContact
-            ? "pointer-events-none select-none blur-[2px] transition-[filter]"
-            : "transition-[filter]"
-        }
-      >
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <h1 className="font-body text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
-              Contacts
-            </h1>
-            <p className="mt-1 font-body text-sm text-[#52677f]">
-              {contacts.length.toLocaleString()} CRM contacts synced with pipeline deals
-            </p>
-          </div>
-          <Link
-            href="/admin/inquiries?contact=new"
-            className="w-fit rounded-xl bg-[#0b4a7a] px-5 py-3 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)]"
-          >
-            + Add Contact
-          </Link>
+      <div className={selected ? "pointer-events-none select-none blur-[2px]" : undefined}>
+        <div className="mb-6">
+          <h1 className="font-body text-2xl font-black tracking-[-0.04em] text-[#0b4a7a]">
+            Inquiries
+          </h1>
+          <p className="mt-1 font-body text-sm text-[#52677f]">
+            {newCount.toLocaleString()} new · {inquiries.length.toLocaleString()} total from the
+            website form
+          </p>
         </div>
 
-        <section className="overflow-hidden rounded-2xl border border-[#dbe6f1] bg-white shadow-sm">
-          <div className="grid grid-cols-[1.2fr_1.1fr_0.8fr_0.7fr_0.55fr_0.45fr] border-b border-[#eaf1f8] px-5 py-3 font-body text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#7b8da3]">
-            <span>Name</span>
-            <span>Email</span>
-            <span>Phone</span>
-            <span>Deals</span>
-            <span>Updated</span>
-            <span />
-          </div>
-
-          {contacts.map((contact) => {
-            const dealsForContact = contactDeals.get(contact.id) ?? [];
-            const activeDeal = dealsForContact.find(
-              (deal) => deal.status !== "won" && deal.status !== "lost",
-            );
-            const statusLabel = activeDeal
-              ? dealStatuses.find((status) => status.value === activeDeal.status)?.label
-              : null;
+        <div className="mb-4 flex flex-wrap gap-2">
+          {FILTERS.map((item) => {
+            const label = item === "all" ? "All" : statusLabel(item);
+            const active = filter === item;
 
             return (
-              <div
-                key={contact.id}
-                className="grid grid-cols-[1.2fr_1.1fr_0.8fr_0.7fr_0.55fr_0.45fr] items-center border-b border-[#eef3f8] px-5 py-4 last:border-b-0"
+              <Link
+                key={item}
+                href={item === "all" ? "/admin/inquiries" : `/admin/inquiries?filter=${item}`}
+                className={
+                  active
+                    ? "rounded-full bg-[#0b4a7a] px-3 py-1.5 font-body text-xs font-bold text-white"
+                    : "rounded-full border border-[#dbe6f1] bg-white px-3 py-1.5 font-body text-xs font-bold text-[#52677f] transition-colors hover:bg-[#eef5ff] hover:text-[#0b4a7a]"
+                }
               >
-                <div className="flex items-center gap-3">
-                  <span className="flex size-8 items-center justify-center rounded-full bg-[#eaf3ff] font-body text-xs font-bold text-[#0b4a7a]">
-                    {(contact.business || contact.name).slice(0, 1)}
-                  </span>
-                  <div>
-                    <p className="font-body text-sm font-bold text-[#0b4a7a]">
-                      {contact.business || contact.name}
-                    </p>
-                    <p className="mt-0.5 font-body text-xs text-[#7b8da3]">
-                      {contact.name}
-                    </p>
-                  </div>
-                </div>
-                <p className="font-body text-sm text-[#52677f]">{contact.email}</p>
-                <p className="font-body text-sm text-[#7b8da3]">
-                  {contact.phone || "-"}
-                </p>
-                <div>
-                  <span className="rounded-full bg-[#eaf3ff] px-2.5 py-1 font-body text-xs font-bold text-[#0b4a7a]">
-                    {dealsForContact.length} {dealsForContact.length === 1 ? "deal" : "deals"}
-                  </span>
-                  {statusLabel && (
-                    <p className="mt-1 font-body text-[0.68rem] text-[#7b8da3]">
-                      {statusLabel}
-                    </p>
-                  )}
-                </div>
-                <p className="font-body text-sm text-[#52677f]">
-                  {formatDate(contact.updated_at)}
-                </p>
-                <div className="flex items-center justify-end gap-2">
-                  <Link
-                    href={`/admin/pipeline/new?contactId=${contact.id}`}
-                    className="rounded-full border border-[#dbe6f1] px-3 py-1.5 font-body text-xs font-bold text-[#52677f] transition-colors hover:bg-[#eef5ff] hover:text-[#0b4a7a]"
-                  >
-                    Deal
-                  </Link>
-                  <Link
-                    href={`/admin/inquiries?contact=${contact.id}`}
-                    className="rounded-full bg-[#0b4a7a] px-3 py-1.5 font-body text-xs font-bold text-white"
-                  >
-                    Edit
-                  </Link>
-                </div>
-              </div>
+                {label}
+              </Link>
             );
           })}
+        </div>
 
-          {contacts.length === 0 && (
-            <div className="px-5 py-10 text-center">
+        <section className="grid gap-3">
+          {visible.map((inquiry) => (
+            <article
+              key={inquiry.id}
+              className="rounded-2xl border border-[#dbe6f1] bg-white p-4 shadow-sm sm:p-5"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-body text-base font-bold text-[#0b4a7a]">
+                      {inquiry.business || inquiry.name}
+                    </p>
+                    <span
+                      className={`rounded-full px-2.5 py-1 font-body text-xs font-bold ${statusTone[inquiry.status]}`}
+                    >
+                      {statusLabel(inquiry.status)}
+                    </span>
+                  </div>
+                  <p className="mt-1 font-body text-sm text-[#52677f]">
+                    {inquiry.name}
+                    {inquiry.goal ? ` · ${inquiry.goal}` : ""}
+                    {inquiry.business_type ? ` · ${inquiry.business_type}` : ""}
+                  </p>
+                  <p className="mt-1 font-body text-xs text-[#7b8da3]">
+                    {formatDate(inquiry.created_at)}
+                  </p>
+                </div>
+                <Link
+                  href={`/admin/inquiries?inquiry=${inquiry.id}${filter === "all" ? "" : `&filter=${filter}`}`}
+                  className="w-fit rounded-full bg-[#0b4a7a] px-4 py-2 font-body text-xs font-bold text-white transition-colors hover:bg-[#08395e]"
+                >
+                  Open
+                </Link>
+              </div>
+            </article>
+          ))}
+
+          {visible.length === 0 && (
+            <div className="rounded-2xl border border-[#dbe6f1] bg-white px-5 py-10 text-center shadow-sm">
               <p className="font-body text-sm font-semibold text-[#0b4a7a]">
-                No contacts yet.
+                No inquiries in this view.
               </p>
               <p className="mt-2 font-body text-sm text-[#7b8da3]">
-                Add a CRM contact or create a deal to sync one automatically.
+                New website forms show up here as soon as they are saved.
               </p>
             </div>
           )}
         </section>
       </div>
 
-      {(selectedContact || isAddingContact) && (
-        <ContactModal
-          contact={selectedContact}
-          dealCount={selectedContact ? contactDeals.get(selectedContact.id)?.length ?? 0 : 0}
+      {selected && (
+        <InquiryModal
+          inquiry={selected}
+          dealId={selectedDealId}
+          filter={filter}
+          error={error}
         />
       )}
     </>
   );
 }
 
-function ContactModal({
-  contact,
-  dealCount,
+function InquiryModal({
+  inquiry,
+  dealId,
+  filter,
+  error,
 }: {
-  contact: Contact | null;
-  dealCount: number;
+  inquiry: Inquiry;
+  dealId?: string;
+  filter: InquiryFilter;
+  error?: string;
 }) {
-  const action = contact ? updateContactDetails : createContact;
+  const closeHref =
+    filter === "all" ? "/admin/inquiries" : `/admin/inquiries?filter=${filter}`;
+  const fields: Array<[string, string | null]> = [
+    ["Email", inquiry.email],
+    ["Phone", inquiry.phone],
+    ["Website", inquiry.handle],
+    ["Business type", inquiry.business_type],
+    ["Goal", inquiry.goal],
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
       <Link
-        href="/admin/inquiries"
-        aria-label="Close contact details"
+        href={closeHref}
+        aria-label="Close inquiry"
         className="absolute inset-0 bg-[#031024]/35 backdrop-blur-md"
       />
 
-      <form
-        action={action}
-        className="relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] border border-[#dbe6f1] bg-white p-5 shadow-[0_30px_90px_rgba(3,16,36,0.22)] sm:p-6"
-      >
-        {contact && <input type="hidden" name="id" value={contact.id} />}
-
+      <div className="relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] border border-[#dbe6f1] bg-white p-5 shadow-[0_30px_90px_rgba(3,16,36,0.22)] sm:p-6">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <h2 className="font-display text-xl font-black tracking-[-0.03em] text-[#0b4a7a]">
-              {contact ? contact.business || contact.name : "Add contact"}
-            </h2>
-            {contact && (
-              <p className="mt-2 font-body text-sm font-medium text-[#52677f]">
-                Linked to {dealCount} {dealCount === 1 ? "deal" : "deals"}.
-              </p>
-            )}
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="font-display text-xl font-black tracking-[-0.03em] text-[#0b4a7a]">
+                {inquiry.business || inquiry.name}
+              </h2>
+              <span
+                className={`rounded-full px-2.5 py-1 font-body text-xs font-bold ${statusTone[inquiry.status]}`}
+              >
+                {statusLabel(inquiry.status)}
+              </span>
+            </div>
+            <p className="mt-2 font-body text-sm font-medium text-[#52677f]">
+              {inquiry.name} · {formatDate(inquiry.created_at)}
+            </p>
           </div>
           <Link
-            href="/admin/inquiries"
+            href={closeHref}
             className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#dbe6f1] font-body text-xl leading-none text-[#7b8da3] transition-colors hover:bg-[#f6f9fc] hover:text-[#0b4a7a]"
           >
             ×
           </Link>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="grid gap-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">Name</span>
-            <input
-              name="contactName"
-              required
-              defaultValue={contact?.name ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
-          <label className="grid gap-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">Business</span>
-            <input
-              name="business"
-              defaultValue={contact?.business ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
-          <label className="grid gap-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">Email</span>
-            <input
-              name="email"
-              type="email"
-              required
-              defaultValue={contact?.email ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
-          <label className="grid gap-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">Phone</span>
-            <input
-              name="phone"
-              defaultValue={contact?.phone ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
-          <label className="grid gap-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">Handle</span>
-            <input
-              name="handle"
-              defaultValue={contact?.handle ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
-          <label className="grid gap-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">
-              Business type
-            </span>
-            <input
-              name="businessType"
-              defaultValue={contact?.business_type ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
-          <label className="grid gap-2 md:col-span-2">
-            <span className="font-body text-sm font-bold text-[#0b4a7a]">
-              Contact notes
-            </span>
-            <textarea
-              name="contactNotes"
-              rows={5}
-              defaultValue={contact?.notes ?? ""}
-              className="rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm text-[#0b4a7a] outline-none focus:border-[#0b4a7a]"
-            />
-          </label>
+        <dl className="grid gap-4 sm:grid-cols-2">
+          {fields.map(([label, value]) => (
+            <div key={label}>
+              <dt className="font-body text-xs font-bold uppercase tracking-[0.12em] text-[#7b8da3]">
+                {label}
+              </dt>
+              <dd className="mt-1 font-body text-sm text-[#0b4a7a]">
+                {label === "Email" && value ? (
+                  <a className="underline decoration-[#dbe6f1] underline-offset-4" href={`mailto:${value}`}>
+                    {value}
+                  </a>
+                ) : label === "Phone" && value ? (
+                  <a className="underline decoration-[#dbe6f1] underline-offset-4" href={`tel:${value}`}>
+                    {value}
+                  </a>
+                ) : (
+                  value || "—"
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="mt-5 rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] p-4">
+          <p className="font-body text-xs font-bold uppercase tracking-[0.12em] text-[#7b8da3]">
+            Message
+          </p>
+          <p className="mt-2 whitespace-pre-wrap font-body text-sm leading-relaxed text-[#0b4a7a]">
+            {inquiry.message?.trim() || "No message included."}
+          </p>
         </div>
 
-        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-          {contact ? (
-            <button
-              type="submit"
-              formAction={deleteContact}
-              className="w-fit rounded-full border border-[#dbe6f1] px-5 py-3 font-body text-sm font-bold text-[#9a2f2f] transition-colors hover:border-[#9a2f2f]/30 hover:bg-[#fff5f5]"
-            >
-              Delete contact
-            </button>
-          ) : (
-            <Link
-              href="/admin/inquiries"
-              className="w-fit rounded-full border border-[#dbe6f1] px-5 py-3 font-body text-sm font-bold text-[#52677f] transition-colors hover:bg-[#f6f9fc]"
-            >
-              Cancel
-            </Link>
-          )}
+        {error && (
+          <p className="mt-4 rounded-2xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 font-body text-sm font-semibold text-[#0b4a7a]">
+            {error}
+          </p>
+        )}
 
-          <div className="flex flex-wrap items-center gap-3">
-            {contact && (
-              <Link
-                href={`/admin/pipeline/new?contactId=${contact.id}`}
-                className="rounded-full border border-[#0b4a7a] px-5 py-3 font-body text-sm font-bold text-[#0b4a7a] transition-colors hover:bg-[#eef5ff]"
-              >
-                Add deal
-              </Link>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
+            {inquiry.status !== "reviewed" && inquiry.status !== "promoted" && (
+              <form action={updateInquiryStatus}>
+                <input type="hidden" name="id" value={inquiry.id} />
+                <input type="hidden" name="status" value="reviewed" />
+                <button className="rounded-full border border-[#dbe6f1] px-4 py-2.5 font-body text-sm font-bold text-[#52677f] transition-colors hover:bg-[#f6f9fc] hover:text-[#0b4a7a]">
+                  Mark reviewed
+                </button>
+              </form>
             )}
-            <button className="rounded-full bg-[#0b4a7a] px-6 py-3 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)] transition-colors hover:bg-[#08395e]">
-              {contact ? "Save contact" : "Create contact"}
-            </button>
+            {inquiry.status !== "archived" && (
+              <form action={updateInquiryStatus}>
+                <input type="hidden" name="id" value={inquiry.id} />
+                <input type="hidden" name="status" value="archived" />
+                <button className="rounded-full border border-[#dbe6f1] px-4 py-2.5 font-body text-sm font-bold text-[#52677f] transition-colors hover:bg-[#f6f9fc] hover:text-[#0b4a7a]">
+                  Archive
+                </button>
+              </form>
+            )}
+            {inquiry.status === "archived" && (
+              <form action={updateInquiryStatus}>
+                <input type="hidden" name="id" value={inquiry.id} />
+                <input type="hidden" name="status" value="new" />
+                <button className="rounded-full border border-[#dbe6f1] px-4 py-2.5 font-body text-sm font-bold text-[#52677f] transition-colors hover:bg-[#f6f9fc] hover:text-[#0b4a7a]">
+                  Mark new
+                </button>
+              </form>
+            )}
           </div>
+
+          {dealId ? (
+            <Link
+              href={`/admin/pipeline/${dealId}`}
+              className="w-fit rounded-full bg-[#0b4a7a] px-5 py-2.5 font-body text-sm font-bold text-white transition-colors hover:bg-[#08395e]"
+            >
+              Open deal
+            </Link>
+          ) : (
+            <form action={promoteInquiry}>
+              <input type="hidden" name="inquiryId" value={inquiry.id} />
+              <button className="w-fit rounded-full bg-[#0b4a7a] px-5 py-2.5 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)] transition-colors hover:bg-[#08395e]">
+                Add to pipeline
+              </button>
+            </form>
+          )}
         </div>
-      </form>
+      </div>
     </div>
   );
 }

@@ -38,12 +38,8 @@ export async function POST(request: NextRequest) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
-  if (!hasSupabaseEnv()) {
-    return loginRedirect(request, "Supabase env vars are missing.");
-  }
-
-  if (!hasAdminSupabaseEnv()) {
-    return loginRedirect(request, "Supabase service role env var is missing.");
+  if (!hasSupabaseEnv() || !hasAdminSupabaseEnv()) {
+    return loginRedirect(request, "Sign-in is unavailable right now.");
   }
 
   if (!email || !password) {
@@ -90,24 +86,25 @@ export async function POST(request: NextRequest) {
   ]);
 
   if (result.error) {
-    const message = result.error.message;
     const unreachable =
-      /fetch failed|failed to fetch|enotfound|econnrefused|network/i.test(
-        message,
+      /fetch failed|failed to fetch|enotfound|econnrefused|network|timed out/i.test(
+        result.error.message,
       );
+
+    console.error("[AMM] Admin login failed");
 
     return loginRedirect(
       request,
       unreachable
-        ? "Could not reach Supabase. Check that NEXT_PUBLIC_SUPABASE_URL points at a live project."
-        : message,
+        ? "Sign-in is unavailable right now."
+        : "Email or password is incorrect.",
     );
   }
 
   const user = "data" in result ? result.data.user : null;
 
   if (!user?.email) {
-    return loginRedirect(request, "Login succeeded, but no session was created.");
+    return loginRedirect(request, "Sign-in is unavailable right now.");
   }
 
   const adminSupabase = createAdminClient();
@@ -118,26 +115,16 @@ export async function POST(request: NextRequest) {
     .maybeSingle();
 
   if (profileError) {
-    return loginRedirect(request, profileError.message);
-  }
-
-  if (!profile) {
+    console.error("[AMM] Admin profile lookup failed");
     await supabase.auth.signOut();
 
-    return loginRedirect(request, "This email is not authorized for Austin admin.");
+    return loginRedirect(request, "Sign-in is unavailable right now.");
   }
 
-  if (profile.id !== user.id) {
-    const { error: updateError } = await adminSupabase
-      .from("admin_profiles")
-      .update({ id: user.id, email: user.email })
-      .eq("email", user.email);
+  if (!profile || profile.id !== user.id) {
+    await supabase.auth.signOut();
 
-    if (updateError) {
-      await supabase.auth.signOut();
-
-      return loginRedirect(request, updateError.message);
-    }
+    return loginRedirect(request, "This account cannot access admin.");
   }
 
   return response;

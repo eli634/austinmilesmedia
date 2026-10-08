@@ -2,7 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { hasSupabaseEnv, getSupabaseEnvDiagnostics } from "@/lib/supabase/env";
+import { hasSupabaseEnv } from "@/lib/supabase/env";
+
+const LOGIN_ERRORS = new Set([
+  "Email or password is incorrect.",
+  "Email and password are required.",
+  "Sign-in is unavailable right now.",
+  "This account cannot access admin.",
+]);
+
+function sanitizeLoginError(error?: string) {
+  return error && LOGIN_ERRORS.has(error) ? error : undefined;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +23,8 @@ export default async function AdminLoginPage({
   searchParams?: Promise<{ error?: string }>;
 }) {
   const params = await searchParams;
-  const error = params?.error;
+  const error = sanitizeLoginError(params?.error);
   const isConfigured = hasSupabaseEnv();
-  const envDiagnostics = getSupabaseEnvDiagnostics();
 
   return (
     <main className="relative z-10 flex min-h-screen items-center justify-center px-5 py-16">
@@ -54,7 +64,7 @@ export default async function AdminLoginPage({
                 name="email"
                 required
                 className="rounded-xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 text-[#0b4a7a] outline-none transition-colors placeholder:text-[#7b8da3] focus:border-[#0b4a7a]"
-                placeholder="austin@example.com"
+                placeholder="austin@austinmilesmedia.com"
               />
             </label>
             <label className="grid gap-2 font-body text-sm text-[#52677f]">
@@ -84,27 +94,16 @@ export default async function AdminLoginPage({
             Sign in
           </Button>
 
+          <p className="mt-4 text-center font-body text-sm text-[#52677f]">
+            <Link href="/admin/forgot-password" className="font-semibold text-[#0b4a7a] underline decoration-[#dbe6f1] underline-offset-4">
+              Forgot password
+            </Link>
+          </p>
+
           {!isConfigured && (
-            <div className="mt-5 grid gap-3">
-              <p className="font-body text-xs leading-relaxed text-[#7b8da3]">
-                Supabase is not configured on this deployment, so login is
-                disabled.
-              </p>
-              {envDiagnostics.missing.length > 0 && (
-                <p className="font-body text-xs leading-relaxed text-[#7b8da3]">
-                  Missing on server ({envDiagnostics.runtime}):{" "}
-                  {envDiagnostics.missing.join(", ")}
-                </p>
-              )}
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="border-[#0b4a7a] text-[#0b4a7a] hover:bg-[#0b4a7a] hover:text-white"
-              >
-                <Link href="/admin">Open UI preview</Link>
-              </Button>
-            </div>
+            <p className="mt-5 font-body text-xs leading-relaxed text-[#7b8da3]">
+              Sign-in is unavailable right now.
+            </p>
           )}
         </form>
       </div>

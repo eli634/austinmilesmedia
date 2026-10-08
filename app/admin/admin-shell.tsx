@@ -15,7 +15,8 @@ import {
 
 const adminLinks = [
   { label: "Dashboard", href: "/admin", icon: "dashboard" },
-  { label: "Contacts", href: "/admin/inquiries", icon: "contacts" },
+  { label: "Inquiries", href: "/admin/inquiries", icon: "inquiries" },
+  { label: "Contacts", href: "/admin/contacts", icon: "contacts" },
   { label: "Pipeline", href: "/admin/pipeline", icon: "pipeline" },
   { label: "Calendar", href: "/admin/calendar", icon: "calendar" },
 ];
@@ -42,6 +43,13 @@ function AdminIcon({ name }: { name: string }) {
           <rect x="14" y="3" width="7" height="7" rx="1.5" />
           <rect x="3" y="14" width="7" height="7" rx="1.5" />
           <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+      );
+    case "inquiries":
+      return (
+        <svg {...common}>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m3 7 9 6 9-6" />
         </svg>
       );
     case "pipeline":
@@ -83,6 +91,13 @@ function AdminIcon({ name }: { name: string }) {
         <svg {...common}>
           <path d="M13 7l5 5-5 5" />
           <path d="M6 7l5 5-5 5" />
+        </svg>
+      );
+    case "password":
+      return (
+        <svg {...common}>
+          <rect x="5" y="11" width="14" height="10" rx="2" />
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
         </svg>
       );
     case "signout":
@@ -184,7 +199,7 @@ export function AdminShell({
 
         <nav
           className={cn(
-            "relative z-10 flex flex-1 flex-col gap-1.5 py-2",
+            "relative z-10 flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto py-2",
             collapsed ? "px-2" : "px-3",
           )}
         >
@@ -233,7 +248,7 @@ export function AdminShell({
 
         <div
           className={cn(
-            "relative z-10 border-t border-white/10",
+            "relative z-10 shrink-0 border-t border-white/10",
             collapsed ? "p-2" : "p-4",
           )}
         >
@@ -251,17 +266,27 @@ export function AdminShell({
                 <p className="font-body text-sm font-semibold text-creme">
                   Austin
                 </p>
-                <p className="font-body text-xs text-creme/45">Admin preview</p>
               </div>
             )}
           </div>
+          <Link
+            href="/admin/account"
+            title={collapsed ? "Change password" : undefined}
+            aria-label={collapsed ? "Change password" : undefined}
+            className={cn(
+              "mb-2 flex items-center whitespace-nowrap rounded-xl border border-white/12 bg-white/[0.03] font-body text-xs font-semibold text-creme transition-colors hover:bg-white/10",
+              collapsed ? "mx-auto size-8 justify-center" : "w-full gap-2 px-3 py-2",
+            )}
+          >
+            {collapsed ? <AdminIcon name="password" /> : "Change password"}
+          </Link>
           <form action={signOut}>
             <button
               type="submit"
               title={collapsed ? "Sign out" : undefined}
               aria-label={collapsed ? "Sign out" : undefined}
               className={cn(
-                "flex items-center whitespace-nowrap rounded-xl border border-white/12 bg-white/[0.03] font-body text-xs font-semibold text-creme/62 transition-colors hover:bg-white/10 hover:text-creme",
+                "flex items-center whitespace-nowrap rounded-xl border border-white/12 bg-white/[0.03] font-body text-xs font-semibold text-creme transition-colors hover:bg-white/10",
                 collapsed ? "mx-auto size-8 justify-center" : "w-full gap-2 px-3 py-2",
               )}
             >
@@ -283,8 +308,8 @@ export function AdminShell({
               className="object-contain object-left"
             />
           </Link>
-          <div className="flex gap-2 overflow-x-auto">
-            {adminLinks.slice(0, 4).map((link) => (
+          <div className="flex items-center gap-2 overflow-x-auto">
+            {adminLinks.map((link) => (
               <Link
                 key={`${link.label}-mobile`}
                 href={link.href}
@@ -294,6 +319,20 @@ export function AdminShell({
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/admin/account"
+              className="rounded-full border border-[#dbe6f1] px-3 py-1.5 font-body text-xs font-semibold text-[#52677f]"
+            >
+              Password
+            </Link>
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="rounded-full border border-[#dbe6f1] px-3 py-1.5 font-body text-xs font-semibold text-[#52677f]"
+              >
+                Sign out
+              </button>
+            </form>
           </div>
         </div>
       </header>

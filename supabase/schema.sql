@@ -179,6 +179,12 @@ to authenticated
 using (public.is_admin())
 with check (public.is_admin());
 
+revoke all on table public.admin_profiles from anon, public;
+revoke all on table public.inquiries from anon, public;
+revoke all on table public.contacts from anon, public;
+revoke all on table public.deals from anon, public;
+revoke all on table public.bookings from anon, public;
+
 -- After creating Austin's Supabase Auth user, run:
 -- insert into public.admin_profiles (id, email, name)
 -- values ('AUTH_USER_UUID_HERE', 'austin@example.com', 'Austin Miles');

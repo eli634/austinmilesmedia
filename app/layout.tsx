@@ -4,9 +4,10 @@ import "./globals.css";
 import { fragmentMono, interTight } from "./fonts";
 import { Grain } from "./grain";
 import { PrivacyNotice } from "./privacy-notice";
+import { getSiteUrl } from "@/lib/site-url";
 import { SmoothScroll } from "./smooth-scroll";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

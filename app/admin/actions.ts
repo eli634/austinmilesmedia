@@ -7,6 +7,39 @@ import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { BookingStatus, DealStatus, InquiryStatus } from "@/lib/supabase/types";
 
+import { inquiryStatuses } from "./constants";
+
+async function requireAdminClient() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
+  const { data: profile, error } = await supabase
+    .from("admin_profiles")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error || !profile) {
+    redirect("/admin/login");
+  }
+
+  return supabase;
+}
+
+function isInquiryStatus(value: string): value is InquiryStatus {
+  return inquiryStatuses.some((status) => status.value === value);
+}
+
+function deletionConfirmed(formData: FormData) {
+  return String(formData.get("confirm") ?? "") === "delete";
+}
+
 export async function signOut() {
   if (isAdminDemoMode()) {
     redirect("/admin");
@@ -19,21 +52,23 @@ export async function signOut() {
 
 export async function updateInquiryStatus(formData: FormData) {
   const id = String(formData.get("id") ?? "");
-  const status = String(formData.get("status") ?? "") as InquiryStatus;
+  const status = String(formData.get("status") ?? "");
 
-  if (!id || !status) {
+  if (!id || !isInquiryStatus(status)) {
     return;
   }
 
   if (isAdminDemoMode()) {
     revalidatePath("/admin/inquiries");
-    return;
+    revalidatePath("/admin");
+    redirect(`/admin/inquiries?inquiry=${id}`);
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("inquiries").update({ status }).eq("id", id);
   revalidatePath("/admin/inquiries");
   revalidatePath("/admin");
+  redirect(`/admin/inquiries?inquiry=${id}`);
 }
 
 export async function promoteInquiry(formData: FormData) {
@@ -47,10 +82,10 @@ export async function promoteInquiry(formData: FormData) {
     revalidatePath("/admin");
     revalidatePath("/admin/inquiries");
     revalidatePath("/admin/pipeline");
-    return;
+    redirect("/admin/pipeline");
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   const { data: inquiry } = await supabase
     .from("inquiries")
     .select("*")
@@ -61,30 +96,78 @@ export async function promoteInquiry(formData: FormData) {
     return;
   }
 
-  const { data: contact } = await supabase
+  const { data: existingDeal } = await supabase
+    .from("deals")
+    .select("id")
+    .eq("inquiry_id", inquiry.id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existingDeal) {
+    await supabase
+      .from("inquiries")
+      .update({ status: "promoted" })
+      .eq("id", inquiry.id);
+    revalidatePath("/admin");
+    revalidatePath("/admin/inquiries");
+    revalidatePath("/admin/contacts");
+    revalidatePath("/admin/pipeline");
+    redirect(`/admin/pipeline/${existingDeal.id}`);
+  }
+
+  const { data: existingContact } = await supabase
     .from("contacts")
+    .select("id")
+    .eq("inquiry_id", inquiry.id)
+    .limit(1)
+    .maybeSingle();
+
+  let contactId = existingContact?.id ?? null;
+
+  if (!contactId) {
+    const { data: contact, error } = await supabase
+      .from("contacts")
+      .insert({
+        inquiry_id: inquiry.id,
+        name: inquiry.name,
+        business: inquiry.business,
+        email: inquiry.email,
+        phone: inquiry.phone,
+        handle: inquiry.handle,
+        business_type: inquiry.business_type,
+        notes: inquiry.message,
+      })
+      .select("id")
+      .single();
+
+    if (error || !contact) {
+      redirect(
+        `/admin/inquiries?inquiry=${inquiry.id}&error=${encodeURIComponent("Could not save this lead.")}`,
+      );
+    }
+
+    contactId = contact.id;
+  }
+
+  const title = inquiry.business || inquiry.name;
+  const { data: deal, error: dealError } = await supabase
+    .from("deals")
     .insert({
+      contact_id: contactId,
       inquiry_id: inquiry.id,
-      name: inquiry.name,
-      business: inquiry.business,
-      email: inquiry.email,
-      phone: inquiry.phone,
-      handle: inquiry.handle,
-      business_type: inquiry.business_type,
-      notes: inquiry.message,
+      title,
+      status: "new_inquiry",
+      notes: inquiry.goal,
     })
     .select("id")
     .single();
 
-  const title = inquiry.business || inquiry.name;
-
-  await supabase.from("deals").insert({
-    contact_id: contact?.id ?? null,
-    inquiry_id: inquiry.id,
-    title,
-    status: "new_inquiry",
-    notes: inquiry.goal,
-  });
+  if (dealError || !deal) {
+    redirect(
+      `/admin/inquiries?inquiry=${inquiry.id}&error=${encodeURIComponent("Could not save this lead.")}`,
+    );
+  }
 
   await supabase
     .from("inquiries")
@@ -93,7 +176,9 @@ export async function promoteInquiry(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/contacts");
   revalidatePath("/admin/pipeline");
+  redirect(`/admin/pipeline/${deal.id}`);
 }
 
 export async function updateDealStatus(formData: FormData) {
@@ -110,7 +195,7 @@ export async function updateDealStatus(formData: FormData) {
     return;
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("deals").update({ status }).eq("id", id);
   revalidatePath("/admin");
   revalidatePath("/admin/pipeline");
@@ -143,7 +228,7 @@ export async function updateDealDetails(formData: FormData) {
     return;
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   const value = valueRaw ? Number(valueRaw) : null;
 
   if (contactId && contactName && email) {
@@ -192,11 +277,11 @@ export async function createContact(formData: FormData) {
   }
 
   if (isAdminDemoMode()) {
-    revalidatePath("/admin/inquiries");
+    revalidatePath("/admin/contacts");
     return;
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("contacts").insert({
     name,
     business,
@@ -208,7 +293,7 @@ export async function createContact(formData: FormData) {
   });
 
   revalidatePath("/admin");
-  revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/contacts");
   revalidatePath("/admin/pipeline");
 }
 
@@ -227,11 +312,11 @@ export async function updateContactDetails(formData: FormData) {
   }
 
   if (isAdminDemoMode()) {
-    revalidatePath("/admin/inquiries");
+    revalidatePath("/admin/contacts");
     return;
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase
     .from("contacts")
     .update({
@@ -246,36 +331,38 @@ export async function updateContactDetails(formData: FormData) {
     .eq("id", id);
 
   revalidatePath("/admin");
-  revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/contacts");
   revalidatePath("/admin/pipeline");
 }
 
 export async function deleteContact(formData: FormData) {
   const id = String(formData.get("id") ?? "");
 
-  if (!id) {
+  if (!id || !deletionConfirmed(formData)) {
     return;
   }
 
   if (isAdminDemoMode()) {
     revalidatePath("/admin/inquiries");
-    redirect("/admin/inquiries");
+    revalidatePath("/admin/contacts");
+    redirect("/admin/contacts");
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("contacts").delete().eq("id", id);
 
   revalidatePath("/admin");
   revalidatePath("/admin/inquiries");
+  revalidatePath("/admin/contacts");
   revalidatePath("/admin/pipeline");
   revalidatePath("/admin/calendar");
-  redirect("/admin/inquiries");
+  redirect("/admin/contacts");
 }
 
 export async function deleteDeal(formData: FormData) {
   const id = String(formData.get("id") ?? "");
 
-  if (!id) {
+  if (!id || !deletionConfirmed(formData)) {
     return;
   }
 
@@ -285,7 +372,7 @@ export async function deleteDeal(formData: FormData) {
     redirect("/admin/pipeline");
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("deals").delete().eq("id", id);
 
   revalidatePath("/admin");
@@ -321,7 +408,7 @@ export async function createDealWithContact(formData: FormData) {
     redirect("/admin/pipeline");
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   const value = valueRaw ? Number(valueRaw) : null;
   let contactId = existingContactId;
 
@@ -403,7 +490,7 @@ export async function createBooking(formData: FormData) {
     return;
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("bookings").insert({
     title,
     starts_at: new Date(startsAt).toISOString(),
@@ -431,8 +518,34 @@ export async function updateBookingStatus(formData: FormData) {
     return;
   }
 
-  const supabase = await createClient();
+  const supabase = await requireAdminClient();
   await supabase.from("bookings").update({ status }).eq("id", id);
   revalidatePath("/admin");
   revalidatePath("/admin/calendar");
+}
+
+export async function updatePassword(formData: FormData) {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  if (password !== confirm) {
+    redirect("/admin/account?error=Passwords%20do%20not%20match.");
+  }
+
+  if (password.length < 8) {
+    redirect("/admin/account?error=Use%20at%20least%208%20characters.");
+  }
+
+  if (isAdminDemoMode()) {
+    redirect("/admin/account?updated=1");
+  }
+
+  const supabase = await requireAdminClient();
+  const { error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    redirect("/admin/account?error=Could%20not%20update%20password.");
+  }
+
+  redirect("/admin/account?updated=1");
 }

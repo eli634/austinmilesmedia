@@ -39,6 +39,8 @@ export default async function AdminPage() {
   let recentInquiries: Inquiry[];
   let openDeals: Deal[];
   let upcomingBookings: Booking[];
+  let newInquiryCount = 0;
+  let upcomingBookingCount = 0;
 
   if (demoMode) {
     recentInquiries = demoInquiries.slice(0, 5);
@@ -48,38 +50,51 @@ export default async function AdminPage() {
     upcomingBookings = demoBookings.filter(
       (booking) => booking.status === "scheduled",
     );
+    newInquiryCount = demoInquiries.filter((inquiry) => inquiry.status === "new").length;
+    upcomingBookingCount = upcomingBookings.length;
   } else {
-    const [inquiriesResult, dealsResult, bookingsResult] = await Promise.all([
-      supabase!
-        .from("inquiries")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(5),
-      supabase!
-        .from("deals")
-        .select("*")
-        .not("status", "in", "(won,lost)")
-        .order("updated_at", { ascending: false })
-        .limit(6),
-      supabase!
-        .from("bookings")
-        .select("*")
-        .gte("starts_at", new Date().toISOString())
-        .order("starts_at", { ascending: true })
-        .limit(5),
-    ]);
+    const now = new Date().toISOString();
+    const [inquiriesResult, newInquiryResult, dealsResult, bookingsResult, bookingCountResult] =
+      await Promise.all([
+        supabase!
+          .from("inquiries")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(5),
+        supabase!
+          .from("inquiries")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "new"),
+        supabase!
+          .from("deals")
+          .select("*")
+          .not("status", "in", "(won,lost)")
+          .order("updated_at", { ascending: false }),
+        supabase!
+          .from("bookings")
+          .select("*")
+          .eq("status", "scheduled")
+          .gte("starts_at", now)
+          .order("starts_at", { ascending: true })
+          .limit(5),
+        supabase!
+          .from("bookings")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "scheduled")
+          .gte("starts_at", now),
+      ]);
 
     recentInquiries = inquiriesResult.data ?? [];
     openDeals = dealsResult.data ?? [];
     upcomingBookings = bookingsResult.data ?? [];
+    newInquiryCount = newInquiryResult.count ?? 0;
+    upcomingBookingCount = bookingCountResult.count ?? 0;
   }
 
   const metrics = [
     {
       label: "New inquiries",
-      value: demoMode
-        ? demoInquiries.filter((inquiry) => inquiry.status === "new").length
-        : recentInquiries.filter((inquiry) => inquiry.status === "new").length,
+      value: newInquiryCount,
       href: "/admin/inquiries",
       helper: "Fresh leads to review",
     },
@@ -91,7 +106,7 @@ export default async function AdminPage() {
     },
     {
       label: "Bookings",
-      value: upcomingBookings.length,
+      value: upcomingBookingCount,
       href: "/admin/calendar",
       helper: "Upcoming calls/shoots",
     },
@@ -184,7 +199,7 @@ export default async function AdminPage() {
                   </p>
                 </div>
                 <Link
-                  href="/admin/inquiries"
+                  href={`/admin/inquiries?inquiry=${inquiry.id}`}
                   className="w-fit rounded-full bg-[#0b4a7a] px-3 py-1.5 font-body text-xs font-bold text-white transition-colors hover:bg-[#08395e]"
                 >
                   Review
