@@ -56,7 +56,7 @@ export default async function ForgotPasswordPage({
               required
               autoComplete="email"
               className="rounded-xl border border-[#dbe6f1] bg-[#f8fbff] px-4 py-3 text-[#0b4a7a] outline-none transition-colors placeholder:text-[#7b8da3] focus:border-[#0b4a7a]"
-              placeholder="austin@austinmilesmedia.com"
+              placeholder="Austin@attentionmeansmoney.com"
             />
           </label>
 
