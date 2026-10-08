@@ -5,7 +5,6 @@ import { isAdminDemoMode } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 import { deleteDeal, updateDealDetails } from "../../../actions";
-import { ConfirmDeleteButton } from "../../../confirm-delete-button";
 import { dealStatuses } from "../../../constants";
 import { demoContacts, demoDeals } from "../../../demo-data";
 
@@ -78,6 +77,10 @@ export default async function DealDetailPage({
         </div>
       </div>
 
+      <form id={`delete-deal-${deal.id}`} action={deleteDeal} className="hidden">
+        <input type="hidden" name="id" value={deal.id} />
+        <input type="hidden" name="confirm" value="delete" />
+      </form>
       <form action={updateDealDetails} className="grid gap-6 xl:grid-cols-[1fr_0.85fr]">
         <input type="hidden" name="id" value={deal.id} />
         <input type="hidden" name="contactId" value={contact?.id ?? ""} />
@@ -238,12 +241,13 @@ export default async function DealDetailPage({
         </section>
 
         <div className="flex flex-col-reverse gap-3 xl:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-          <ConfirmDeleteButton
-            formAction={deleteDeal}
-            label="Delete deal"
-            confirmLabel="Confirm delete"
+          <button
+            type="submit"
+            form={`delete-deal-${deal.id}`}
             className="w-fit rounded-full border border-[#dbe6f1] px-5 py-3 font-body text-sm font-bold text-[#9a2f2f] transition-colors hover:border-[#9a2f2f]/30 hover:bg-[#fff5f5]"
-          />
+          >
+            Delete deal
+          </button>
           <button className="w-fit rounded-full bg-[#0b4a7a] px-6 py-3 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)] transition-colors hover:bg-[#08395e]">
             Save deal
           </button>

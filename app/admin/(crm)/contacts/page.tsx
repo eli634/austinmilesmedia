@@ -9,7 +9,6 @@ import {
   deleteContact,
   updateContactDetails,
 } from "../../actions";
-import { ConfirmDeleteButton } from "../../confirm-delete-button";
 import { dealStatuses } from "../../constants";
 import { demoContacts, demoDeals } from "../../demo-data";
 
@@ -209,6 +208,12 @@ function ContactModal({
         className="absolute inset-0 bg-[#031024]/35 backdrop-blur-md"
       />
 
+      {contact && (
+        <form id={`delete-contact-${contact.id}`} action={deleteContact} className="hidden">
+          <input type="hidden" name="id" value={contact.id} />
+          <input type="hidden" name="confirm" value="delete" />
+        </form>
+      )}
       <form
         action={action}
         className="relative z-10 max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] border border-[#dbe6f1] bg-white p-5 shadow-[0_30px_90px_rgba(3,16,36,0.22)] sm:p-6"
@@ -303,12 +308,13 @@ function ContactModal({
 
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
           {contact ? (
-            <ConfirmDeleteButton
-              formAction={deleteContact}
-              label="Delete contact"
-              confirmLabel="Confirm delete"
+            <button
+              type="submit"
+              form={`delete-contact-${contact.id}`}
               className="w-fit rounded-full border border-[#dbe6f1] px-5 py-3 font-body text-sm font-bold text-[#9a2f2f] transition-colors hover:border-[#9a2f2f]/30 hover:bg-[#fff5f5]"
-            />
+            >
+              Delete contact
+            </button>
           ) : (
             <Link
               href="/admin/contacts"

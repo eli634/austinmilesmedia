@@ -5,7 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 import type { Database, DealStatus } from "@/lib/supabase/types";
 
 import { deleteDeal, updateDealDetails } from "../../actions";
-import { ConfirmDeleteButton } from "../../confirm-delete-button";
 import { dealStatuses } from "../../constants";
 import { demoContacts, demoDeals } from "../../demo-data";
 import { KanbanBoard } from "./kanban-board";
@@ -248,6 +247,10 @@ function DealQuickEditModal({
         className="absolute inset-0 bg-[#031024]/35 backdrop-blur-md"
       />
 
+      <form id={`delete-deal-${deal.id}`} action={deleteDeal} className="hidden">
+        <input type="hidden" name="id" value={deal.id} />
+        <input type="hidden" name="confirm" value="delete" />
+      </form>
       <form
         action={updateDealDetails}
         className="relative z-10 max-h-[88vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] border border-[#dbe6f1] bg-white p-5 shadow-[0_30px_90px_rgba(3,16,36,0.22)] sm:p-6"
@@ -424,12 +427,13 @@ function DealQuickEditModal({
             Open full page
           </Link>
           <div className="flex flex-wrap items-center justify-end gap-3">
-            <ConfirmDeleteButton
-              formAction={deleteDeal}
-              label="Delete deal"
-              confirmLabel="Confirm delete"
+            <button
+              type="submit"
+              form={`delete-deal-${deal.id}`}
               className="rounded-full border border-[#dbe6f1] px-5 py-3 font-body text-sm font-bold text-[#9a2f2f] transition-colors hover:border-[#9a2f2f]/30 hover:bg-[#fff5f5]"
-            />
+            >
+              Delete deal
+            </button>
             <button className="rounded-full bg-[#0b4a7a] px-6 py-3 font-body text-sm font-bold text-white shadow-[0_10px_24px_rgba(11,74,122,0.18)] transition-colors hover:bg-[#08395e]">
               Save changes
             </button>

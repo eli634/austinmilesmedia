@@ -373,7 +373,16 @@ export async function deleteDeal(formData: FormData) {
   }
 
   const supabase = await requireAdminClient();
-  await supabase.from("deals").delete().eq("id", id);
+  const { error: bookingError } = await supabase
+    .from("bookings")
+    .update({ deal_id: null })
+    .eq("deal_id", id);
+  const { error } = await supabase.from("deals").delete().eq("id", id);
+
+  if (bookingError || error) {
+    console.error("[AMM] Deal delete failed");
+    redirect(`/admin/pipeline?deal=${id}`);
+  }
 
   revalidatePath("/admin");
   revalidatePath("/admin/inquiries");
