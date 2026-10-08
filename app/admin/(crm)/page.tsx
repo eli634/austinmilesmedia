@@ -7,9 +7,18 @@ import type { Database } from "@/lib/supabase/types";
 import { dealStatuses } from "../constants";
 import { demoBookings, demoDeals, demoInquiries } from "../demo-data";
 
-type Inquiry = Database["public"]["Tables"]["inquiries"]["Row"];
-type Deal = Database["public"]["Tables"]["deals"]["Row"];
-type Booking = Database["public"]["Tables"]["bookings"]["Row"];
+type Inquiry = Pick<
+  Database["public"]["Tables"]["inquiries"]["Row"],
+  "id" | "created_at" | "status" | "name" | "business" | "goal" | "business_type" | "email"
+>;
+type Deal = Pick<
+  Database["public"]["Tables"]["deals"]["Row"],
+  "id" | "title" | "status" | "value"
+>;
+type Booking = Pick<
+  Database["public"]["Tables"]["bookings"]["Row"],
+  "id" | "title" | "starts_at" | "status"
+>;
 
 function formatDate(value: string | null) {
   if (!value) {
@@ -54,41 +63,32 @@ export default async function AdminPage() {
     upcomingBookingCount = upcomingBookings.length;
   } else {
     const now = new Date().toISOString();
-    const [inquiriesResult, newInquiryResult, dealsResult, bookingsResult, bookingCountResult] =
-      await Promise.all([
-        supabase!
-          .from("inquiries")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(5),
-        supabase!
-          .from("inquiries")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "new"),
-        supabase!
-          .from("deals")
-          .select("*")
-          .not("status", "in", "(won,lost)")
-          .order("updated_at", { ascending: false }),
-        supabase!
-          .from("bookings")
-          .select("*")
-          .eq("status", "scheduled")
-          .gte("starts_at", now)
-          .order("starts_at", { ascending: true })
-          .limit(5),
-        supabase!
-          .from("bookings")
-          .select("id", { count: "exact", head: true })
-          .eq("status", "scheduled")
-          .gte("starts_at", now),
-      ]);
+    const [inquiriesResult, dealsResult, bookingsResult] = await Promise.all([
+      supabase!
+        .from("inquiries")
+        .select("id,created_at,status,name,business,goal,business_type,email")
+        .order("created_at", { ascending: false })
+        .limit(100),
+      supabase!
+        .from("deals")
+        .select("id,title,status,value")
+        .not("status", "in", "(won,lost)")
+        .order("updated_at", { ascending: false }),
+      supabase!
+        .from("bookings")
+        .select("id,title,starts_at,status")
+        .eq("status", "scheduled")
+        .gte("starts_at", now)
+        .order("starts_at", { ascending: true })
+        .limit(50),
+    ]);
 
-    recentInquiries = inquiriesResult.data ?? [];
+    const inquiries = inquiriesResult.data ?? [];
+    recentInquiries = inquiries.slice(0, 5);
     openDeals = dealsResult.data ?? [];
-    upcomingBookings = bookingsResult.data ?? [];
-    newInquiryCount = newInquiryResult.count ?? 0;
-    upcomingBookingCount = bookingCountResult.count ?? 0;
+    upcomingBookings = (bookingsResult.data ?? []).slice(0, 5);
+    newInquiryCount = inquiries.filter((inquiry) => inquiry.status === "new").length;
+    upcomingBookingCount = bookingsResult.data?.length ?? 0;
   }
 
   const metrics = [

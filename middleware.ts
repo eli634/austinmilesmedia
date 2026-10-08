@@ -1,7 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { hasSupabaseAuthCookie } from "@/lib/supabase/auth-cookie";
+import {
+  authSessionNeedsRefresh,
+  hasSupabaseAuthCookie,
+} from "@/lib/supabase/auth-cookie";
 import {
   getSupabaseAnonKey,
   getSupabaseUrl,
@@ -41,6 +44,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next({ request });
   }
 
+  if (!isPublicAdminPath(pathname) && !hasSupabaseAuthCookie(request)) {
+    return NextResponse.redirect(new URL("/admin/login", request.url));
+  }
+
+  if (
+    isPublicAdminPath(pathname) ||
+    !authSessionNeedsRefresh(request.cookies.getAll())
+  ) {
+    return NextResponse.next({ request });
+  }
+
   let response = NextResponse.next({ request });
   const pendingCookies: Array<{
     name: string;
@@ -66,17 +80,9 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  if (!isPublicAdminPath(pathname) && !hasSupabaseAuthCookie(request)) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
-  }
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  if (isPublicAdminPath(pathname)) {
-    return response;
-  }
 
   if (!user) {
     return NextResponse.redirect(new URL("/admin/login", request.url));

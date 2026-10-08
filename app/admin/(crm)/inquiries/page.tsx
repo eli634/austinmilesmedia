@@ -8,7 +8,7 @@ import { promoteInquiry, updateInquiryStatus } from "../../actions";
 import { inquiryStatuses } from "../../constants";
 import { demoDeals, demoInquiries } from "../../demo-data";
 
-type Inquiry = Database["public"]["Tables"]["inquiries"]["Row"];
+type Inquiry = Omit<Database["public"]["Tables"]["inquiries"]["Row"], "raw_payload">;
 
 const FILTERS = ["all", "new", "reviewed", "promoted", "archived"] as const;
 type InquiryFilter = (typeof FILTERS)[number];
@@ -64,7 +64,9 @@ export default async function AdminInquiriesPage({
     const [inquiriesResult, dealsResult] = await Promise.all([
       supabase!
         .from("inquiries")
-        .select("*")
+        .select(
+          "id,created_at,status,business_type,goal,name,business,handle,email,phone,message,source",
+        )
         .order("created_at", { ascending: false }),
       supabase!.from("deals").select("id,inquiry_id").not("inquiry_id", "is", null),
     ]);
