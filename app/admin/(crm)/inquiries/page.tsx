@@ -137,6 +137,11 @@ export default async function AdminInquiriesPage({
                     >
                       {statusLabel(inquiry.status)}
                     </span>
+                    {inquiry.source === "consulting" && (
+                      <span className="rounded-full border border-[#0f5d73]/25 bg-[#f3f8f8] px-2.5 py-1 font-body text-xs font-bold text-[#0f5d73]">
+                        Consulting
+                      </span>
+                    )}
                   </div>
                   <p className="mt-1 font-body text-sm text-[#52677f]">
                     {inquiry.name}
@@ -201,6 +206,7 @@ function InquiryModal({
     ["Website", inquiry.handle],
     ["Business type", inquiry.business_type],
     ["Goal", inquiry.goal],
+    ["Source", inquiry.source === "consulting" ? "Consulting" : "Get started"],
   ];
 
   return (

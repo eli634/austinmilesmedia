@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 import { createAdminClient, hasAdminSupabaseEnv } from "@/lib/supabase/admin";
 
+const inquirySources = ["get-started", "consulting"] as const;
+
+type InquirySource = (typeof inquirySources)[number];
+
 type InquiryPayload = {
   businessType?: string;
   goal?: string;
@@ -11,6 +15,7 @@ type InquiryPayload = {
   email?: string;
   phone?: string;
   message?: string;
+  source?: string;
 };
 
 const MAX_BODY_BYTES = 32_000;
@@ -27,7 +32,12 @@ const fieldLimits: Record<keyof InquiryPayload, number> = {
   email: 180,
   phone: 60,
   message: 2_000,
+  source: 40,
 };
+
+function resolveSource(value: string | undefined): InquirySource {
+  return inquirySources.find((source) => source === value) ?? "get-started";
+}
 
 function escapeHtml(value: string) {
   return value
@@ -125,6 +135,7 @@ export async function POST(request: Request) {
 
   const name = data.name?.trim();
   const email = data.email?.trim();
+  const source = resolveSource(data.source);
   const emailLooksValid = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   if (!name || !emailLooksValid) {
@@ -143,6 +154,7 @@ export async function POST(request: Request) {
     ["Email", email],
     ["Phone", data.phone],
     ["Message", data.message],
+    ["Source", source === "consulting" ? "Consulting" : "Get started"],
   ];
 
   const summary = fields
@@ -169,7 +181,7 @@ export async function POST(request: Request) {
       email,
       phone: data.phone?.trim() || null,
       message: data.message?.trim() || null,
-      source: "get-started",
+      source,
       raw_payload: JSON.parse(JSON.stringify(data)),
     });
 
@@ -199,7 +211,8 @@ export async function POST(request: Request) {
   const notifyFrom = process.env.INQUIRY_FROM_EMAIL;
 
   if (apiKey && notifyTo && notifyFrom) {
-    const html = `<h2>New inquiry — ${escapeHtml(name)}</h2><pre style="font:14px/1.6 ui-sans-serif,system-ui">${escapeHtml(
+    const subjectLead = source === "consulting" ? "Consulting inquiry" : "New inquiry";
+    const html = `<h2>${escapeHtml(subjectLead)} — ${escapeHtml(name)}</h2><pre style="font:14px/1.6 ui-sans-serif,system-ui">${escapeHtml(
       summary,
     )}</pre>`;
 
@@ -214,7 +227,7 @@ export async function POST(request: Request) {
           from: notifyFrom,
           to: notifyTo,
           reply_to: email,
-          subject: `New inquiry — ${sanitizeHeader(name)}`,
+          subject: `${subjectLead} — ${sanitizeHeader(name)}`,
           html,
         }),
       });
