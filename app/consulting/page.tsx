@@ -7,7 +7,7 @@ import { FrameLink } from "./frame-link";
 import { VslSeat } from "./vsl-seat";
 
 const description =
-  "A consult for founders and personal brands who want a direct read on how they show up. Book a call with Austin.";
+  "A consult for founders who want their name to scale the business. Book a call with Austin.";
 
 export const metadata: Metadata = {
   title: "Consulting",
@@ -27,23 +27,23 @@ export const metadata: Metadata = {
 };
 
 const checks = [
-  "Founders and personal brands",
-  "The company, the person, or both",
-  "You keep the work. He does not film or post",
+  "Founders scaling a personal brand",
+  "You keep the work after the call",
+  "He does not film or post",
 ];
 
 const truths = [
   {
-    title: "The company and you don’t match",
-    body: "The business sounds like one thing. You sound like another.",
+    title: "Your name should already mean something",
+    body: "When someone in your market hears your name, they should know what you do. If they still have to be told, the personal brand is not doing any work yet.",
   },
   {
-    title: "There’s no line you can repeat",
-    body: "Every intro, pitch, and page starts from zero.",
+    title: "More content will not fix that",
+    body: "Posting every day only helps after you know what you want the name to mean. Until then, a content team is just publishing more of something unclear.",
   },
   {
-    title: "A crew can’t decide it",
-    body: "They can make more. They can’t tell you what the brand is.",
+    title: "You have to be able to run it",
+    body: "Austin will help you decide what the name stands for. He will not film it, post it, or stay on to manage it. You leave able to do that yourself.",
   },
 ];
 
@@ -57,8 +57,8 @@ const covers = [
     body: "The person this is built for. Specific enough that you know who should get it, and who can miss it.",
   },
   {
-    title: "Company, name, or both",
-    body: "Whether people should meet the company first, you first, or both. The other one gets a job, so the two stop talking over each other.",
+    title: "What your name is known for",
+    body: "The one thing the market should think when they hear your name. That gets settled before anything else goes out.",
   },
   {
     title: "What to say first",
@@ -117,14 +117,14 @@ export default function ConsultingPage() {
         </div>
       </header>
 
-      <article className="mx-auto w-full max-w-[760px] px-5 pb-24 pt-16 text-center sm:px-8 sm:pt-24">
+      <article className="mx-auto w-full max-w-[760px] px-5 pb-4 pt-16 text-center sm:px-8 sm:pt-24">
         <h1 className="font-display text-[clamp(2.7rem,7.4vw,5.35rem)] font-extrabold leading-[0.88] tracking-[-0.055em] text-creme drop-shadow-[0_10px_40px_rgba(2,7,19,0.45)]">
           How your brand
           <br />
           should show up.
         </h1>
-        <p className="mx-auto mt-6 max-w-[28ch] font-body text-[1.05rem] font-medium leading-snug text-creme/70 sm:text-[1.15rem]">
-          Austin consults founders and personal brands on the approach.
+        <p className="mx-auto mt-6 max-w-[18em] text-balance font-body text-[1.2rem] font-semibold leading-snug text-creme sm:max-w-none sm:text-[1.45rem]">
+          Your name becomes the reason people buy.
         </p>
         <ul className="glass mx-auto mt-8 flex w-fit max-w-full flex-col items-start gap-2.5 rounded-3xl px-5 py-4 text-left shadow-[0_18px_50px_rgba(2,7,19,0.28)]">
           {checks.map((item) => (
@@ -158,7 +158,7 @@ export default function ConsultingPage() {
         <div className="divider mt-16" />
         <section className="pt-12">
           <h2 className="font-display text-[1.7rem] font-extrabold tracking-[-0.04em] text-creme">
-            Where it breaks
+            What gets in the way
           </h2>
           <div className="mx-auto mt-8 flex max-w-[34rem] flex-col gap-6 text-left">
             {truths.map((item) => (
@@ -210,6 +210,64 @@ export default function ConsultingPage() {
           </div>
         </section>
       </article>
+
+      <section className="relative overflow-hidden px-5 pb-20 pt-8 text-center sm:px-8">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-[28rem] w-[46rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-[radial-gradient(closest-side,rgba(70,205,240,0.16),transparent)]"
+        />
+        <div className="relative mx-auto w-full max-w-[760px] border-t border-white/10 pt-16">
+          <h2 className="font-display text-[clamp(2.2rem,5vw,3.4rem)] font-extrabold leading-[0.92] tracking-[-0.05em] text-creme">
+            Let’s get to work.
+          </h2>
+          <p className="mx-auto mt-5 max-w-[40rem] text-balance font-body text-[1.05rem] font-medium leading-relaxed text-creme/75">
+            Your name becomes the reason people buy. On the call, you and Austin
+            decide what you should be known for, what to say, and what to stop.
+            You leave with that written down, and you run it. He does not film
+            or post. If the call is a fit, he will tell you what it costs.
+          </p>
+          <FrameLink href="#book" className="mt-8">
+            Book a call
+          </FrameLink>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10">
+        <div className="mx-auto flex w-full max-w-[760px] flex-col gap-6 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <Link
+            href="/"
+            aria-label="AMM home"
+            className="relative h-7 w-28 shrink-0"
+          >
+            <Image
+              src="/amm-signature-white-transparent.png"
+              alt="AMM"
+              fill
+              sizes="112px"
+              className="object-contain object-left"
+            />
+          </Link>
+          <div className="flex flex-col gap-2 sm:items-end">
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              <a
+                href="mailto:info@attentionmeansmoney.com"
+                className="font-body text-sm font-medium text-creme/60 transition-colors hover:text-creme"
+              >
+                info@attentionmeansmoney.com
+              </a>
+              <Link
+                href="/privacy"
+                className="font-body text-sm font-medium text-creme/60 transition-colors hover:text-creme"
+              >
+                Privacy
+              </Link>
+            </div>
+            <p className="font-body text-sm text-creme/40">
+              © {new Date().getFullYear()} AMM · Attention Means Money
+            </p>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

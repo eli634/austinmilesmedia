@@ -7,13 +7,10 @@ import { cn } from "@/lib/utils";
 
 import { FrameButton } from "./frame-link";
 
-const seats = ["Founder", "Personal brand", "Both"] as const;
-
 const fieldClass =
   "w-full rounded-full border border-white/15 bg-white/[0.04] px-4 py-2.5 font-body text-base text-creme outline-none backdrop-blur-md transition-colors placeholder:text-creme/40 focus:border-creme/50";
 
 export function BookCall() {
-  const [seat, setSeat] = useState("");
   const [form, setForm] = useState({
     name: "",
     brand: "",
@@ -28,7 +25,6 @@ export function BookCall() {
     setForm((prev) => ({ ...prev, [key]: value }));
 
   const canSubmit =
-    seat &&
     form.name.trim() &&
     form.brand.trim() &&
     form.email.trim() &&
@@ -46,7 +42,7 @@ export function BookCall() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           source: "consulting",
-          businessType: seat,
+          businessType: "Personal brand",
           goal: "Book a call",
           name: form.name,
           business: form.brand,
@@ -96,47 +92,7 @@ export function BookCall() {
         the time.
       </p>
 
-      <fieldset className="mt-6">
-        <legend className="font-body text-[0.8rem] font-semibold text-creme">
-          This call is for
-        </legend>
-        <div className="mt-2.5 flex flex-wrap gap-2">
-          {seats.map((option) => {
-            const selected = seat === option;
-            return (
-              <label
-                key={option}
-                className={cn(
-                  "relative cursor-pointer rounded-full border px-3.5 py-1.5 font-body text-[0.8rem] font-semibold backdrop-blur-md has-[:focus-visible]:outline has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-creme",
-                  selected
-                    ? "border-creme text-ink"
-                    : "border-white/25 bg-white/[0.04] text-creme",
-                )}
-              >
-                {selected && (
-                  <motion.span
-                    layoutId="consult-seat"
-                    className="absolute inset-0 bg-creme"
-                    style={{ borderRadius: 999 }}
-                    transition={{ type: "spring", stiffness: 440, damping: 34 }}
-                  />
-                )}
-                <input
-                  type="radio"
-                  name="seat"
-                  value={option}
-                  checked={selected}
-                  onChange={() => setSeat(option)}
-                  className="sr-only"
-                />
-                <span className="relative z-10">{option}</span>
-              </label>
-            );
-          })}
-        </div>
-      </fieldset>
-
-      <div className="mt-5 grid gap-3.5">
+      <div className="mt-6 grid gap-3.5">
         <div className="grid gap-3.5 sm:grid-cols-2">
           <label className="grid gap-1.5">
             <span className="font-body text-[0.8rem] font-semibold text-creme">
@@ -154,7 +110,7 @@ export function BookCall() {
           </label>
           <label className="grid gap-1.5">
             <span className="font-body text-[0.8rem] font-semibold text-creme">
-              Company or brand
+              Company
             </span>
             <input
               className={fieldClass}
